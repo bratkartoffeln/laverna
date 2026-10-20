@@ -106,6 +106,7 @@ define([
         },
 
         registerEvents: function() {
+            PageableCollection.prototype.registerEvents.call(this);
             if (this.sortField === 'updated') {
                 // Sort the collection again when updated
                 this.listenTo(this, 'change:updated', this.sortItOut);

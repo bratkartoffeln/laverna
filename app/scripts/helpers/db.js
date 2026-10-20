@@ -26,10 +26,11 @@ define([
          * @type object options
          */
         getDb: function(options) {
-            var dbId = options.profile + '/' + options.storeName;
+            var databaseName = (options.namespace || '') + (options.profile || 'notes-db'),
+                dbId = databaseName + '/' + options.storeName;
 
             this.dbs[dbId] = this.dbs[dbId] || localForage.createInstance({
-                name      : options.profile || 'notes-db',
+                name      : databaseName,
                 storeName : options.storeName
             });
 

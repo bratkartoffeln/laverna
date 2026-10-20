@@ -1,0 +1,43 @@
+name: Verify Laverna NAS
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.14.0
+          cache: npm
+          cache-dependency-path: nas/package-lock.json
+      - run: npm ci --prefix nas --ignore-scripts
+      - run: npm test --prefix nas
+      - run: node nas/build.js --web-only
+        env:
+          LAVERNA_REVISION: ${{ github.sha }}
+      - run: node nas/node_modules/playwright-core/cli.js install --with-deps chromium
+      - run: node nas/tests/browser.mjs
+      - name: Build and verify production container
+        run: |
+          docker build --build-arg LAVERNA_REVISION="$GITHUB_SHA" -t laverna-ci .
+          docker run -d --name laverna-ci --network none --read-only --tmpfs /data:uid=1000,gid=1000,mode=0700 laverna-ci
+          for attempt in $(seq 1 30); do
+            if docker exec laverna-ci node -e "fetch('http://127.0.0.1:3000/ready.json').then(r=>r.json()).then(j=>{if(!j.sync||j.sourceRevision!==process.env.LAVERNA_REVISION)process.exit(1)})"; then exit 0; fi
+            sleep 1
+          done
+          docker logs laverna-ci
+          exit 1
+      - if: always()
+        run: docker rm -f laverna-ci || true

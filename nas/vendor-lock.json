@@ -1,0 +1,225 @@
+{
+  "Blob": {
+    "source": "https://github.com/eligrey/Blob.js.git",
+    "target": "9f7eb544f3c2cd6cf8c50dea8b47bd6634411b50",
+    "commit": "9f7eb544f3c2cd6cf8c50dea8b47bd6634411b50"
+  },
+  "FileSaver": {
+    "source": "https://github.com/eligrey/FileSaver.js.git",
+    "target": "1.3.2",
+    "commit": "975159128137bc3ccfbe66706f439a18761aa0ee"
+  },
+  "MathJax": {
+    "source": "https://github.com/components/MathJax.git",
+    "target": "2.6.1",
+    "commit": "aa26ea1cf0a735f72e903aa1856507767c9b7be0"
+  },
+  "backbone": {
+    "source": "https://github.com/jashkenas/backbone.git",
+    "target": "1.3.3",
+    "commit": "8ec88604732944f197b352a6be22c8216ea9d3a1"
+  },
+  "backbone.babysitter": {
+    "source": "https://github.com/marionettejs/backbone.babysitter.git",
+    "target": "v0.1.12",
+    "commit": "e21524f2fd5164d2fb7a48c3c12d14c22175af4d"
+  },
+  "backbone.marionette": {
+    "source": "https://github.com/marionettejs/backbone.marionette.git",
+    "target": "v2.4.7",
+    "commit": "e1a512a2f44fadfebe5c01e8966bdbe4fa5f9e51"
+  },
+  "backbone.radio": {
+    "source": "https://github.com/marionettejs/backbone.radio.git",
+    "target": "v1.0.5",
+    "commit": "277936bb207583b64bdc3b71f039bf170ea0a393"
+  },
+  "backbone.wreqr": {
+    "source": "https://github.com/marionettejs/backbone.wreqr.git",
+    "target": "v1.4.0",
+    "commit": "ce4665f7e13ec46d66fe9215f5a91199e29dff51"
+  },
+  "bluebird": {
+    "source": "https://github.com/petkaantonov/bluebird.git",
+    "target": "v3.4.7",
+    "commit": "bf58f4c446454c3a851bd97a3d1c2f87ee55bd40"
+  },
+  "blueimp-canvas-to-blob": {
+    "source": "https://github.com/blueimp/JavaScript-Canvas-to-Blob.git",
+    "target": "2.1.3",
+    "commit": "e028de865c4151ec728871683444cf5e539167b1"
+  },
+  "bootstrap": {
+    "source": "https://github.com/twbs/bootstrap.git",
+    "target": "v3.3.7",
+    "commit": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
+  },
+  "codemirror": {
+    "source": "https://github.com/components/codemirror.git",
+    "target": "5.17.0",
+    "commit": "5aba714536ec42d5be81849d0abac7b3ff0021ac"
+  },
+  "device.js": {
+    "source": "https://github.com/matthewhudson/device.js.git",
+    "target": "v0.2.7",
+    "commit": "02233eaaf51f993c762f770e42fbe537872dd3fe"
+  },
+  "dropbox": {
+    "source": "https://registry.npmjs.org/dropbox/-/dropbox-0.10.3.tgz",
+    "target": "*",
+    "commit": null,
+    "sha256": {
+      "lib/dropbox.js": "9045094f88a4a0f76a58faa9f5e2d2159a17077d058cfe6292a459f850699d38"
+    }
+  },
+  "dropzone": {
+    "source": "https://github.com/enyo/dropzone.git",
+    "target": "v4.3.0",
+    "commit": "48019baccdc567df198549dbe75c28bfcd6ab3e0"
+  },
+  "enquire": {
+    "source": "https://github.com/WickyNilliams/enquire.js.git",
+    "target": "v2.1.6",
+    "commit": "6ffa52210b5801acccc58f7a0f27e3d0b7ab318c"
+  },
+  "fastclick": {
+    "source": "https://github.com/ftlabs/fastclick.git",
+    "target": "v1.0.6",
+    "commit": "2ac7258407619398005ca720596f0d36ce66a6c8"
+  },
+  "fuse": {
+    "source": "https://github.com/krisk/Fuse.git",
+    "target": "v2.3.0",
+    "commit": "7126187f436e2bcf1a5958c21d85c63ba73e4f8b"
+  },
+  "hammerjs": {
+    "source": "https://github.com/EightMedia/hammer.js.git",
+    "target": "v2.0.8",
+    "commit": "ee611316bec077fcfbba3fd604ebc4b0b35ac288"
+  },
+  "i18next": {
+    "source": "https://github.com/i18next/i18next.git",
+    "target": "v3.4.4",
+    "commit": "8c7644f2dd71e41eebf6ce83567813d1e2decaf2"
+  },
+  "i18next-xhr-backend": {
+    "source": "https://github.com/i18next/i18next-xhr-backend.git",
+    "target": "v1.5.1",
+    "commit": "40797825193abc2a4775eacb3d365a38022717ba"
+  },
+  "jquery": {
+    "source": "https://github.com/jquery/jquery-dist.git",
+    "target": "3.1.1",
+    "commit": "1b30f3ad466ebf2714d47eda34dbd7fdf6849fe3"
+  },
+  "jquery-hammerjs": {
+    "source": "https://github.com/hammerjs/jquery.hammer.js.git",
+    "target": "2.0.0",
+    "commit": "e7049b9e51e1caad5dafd96c9ae50f77db4f9356"
+  },
+  "jszip": {
+    "source": "https://github.com/Stuk/jszip.git",
+    "target": "v2.5.0",
+    "commit": "39c69fde2d3779889dbf874d3c3ee9d556614fe2"
+  },
+  "localforage": {
+    "source": "https://github.com/mozilla/localForage.git",
+    "target": "1.4.3",
+    "commit": "b82d9e58ff5bac370ee04f7fb368ad955747fac8"
+  },
+  "marionette": {
+    "source": "https://github.com/marionettejs/backbone.marionette.git",
+    "target": "v2.4.7",
+    "commit": "e1a512a2f44fadfebe5c01e8966bdbe4fa5f9e51"
+  },
+  "markdown-it": {
+    "source": "https://github.com/markdown-it/markdown-it.git",
+    "target": "7.0.1",
+    "commit": "c3f619c19a0b76abcd288e621a69099a72a5ee26"
+  },
+  "markdown-it-hashtag": {
+    "source": "https://github.com/svbergerem/markdown-it-hashtag.git",
+    "target": "v0.4.0",
+    "commit": "afadfccac5670e1a0212648c043b178aa35045ec"
+  },
+  "markdown-it-imsize": {
+    "source": "https://github.com/tatsy/markdown-it-imsize.git",
+    "target": "v2.0.1",
+    "commit": "798b452a8e9b741e93930e4778b623758e08c1eb"
+  },
+  "markdown-it-math": {
+    "source": "https://github.com/runarberg/markdown-it-math.git",
+    "target": "v4.0.0",
+    "commit": "0a1062af77abc4dc0e18f0177b4b9937c5762904"
+  },
+  "markdown-it-sanitizer": {
+    "source": "https://github.com/svbergerem/markdown-it-sanitizer.git",
+    "target": "v0.4.3",
+    "commit": "6efc1722b9f776d2b052a099323870ba1bc299ef"
+  },
+  "modernizr": {
+    "source": "https://github.com/Modernizr/Modernizr.git",
+    "target": "v2.8.3",
+    "commit": "d6bb30c0f12ebb3ddd01e90b0bf435e1c34e6f11"
+  },
+  "mousetrap": {
+    "source": "https://github.com/ccampbell/mousetrap.git",
+    "target": "1.6.5",
+    "commit": "2f9a476ba6158ba69763e4fcf914966cc72ef433"
+  },
+  "prism": {
+    "source": "https://github.com/LeaVerou/prism.git",
+    "target": "1.5.1",
+    "commit": "4a44f01606dbc88ac49accce9cd0cd7cb2fe213d"
+  },
+  "q": {
+    "source": "https://github.com/kriskowal/q.git",
+    "target": "v1.4.1",
+    "commit": "90b46a4029ed987949f6948e652308420143fe1a"
+  },
+  "remotestorage.js": {
+    "source": "https://github.com/remotestorage/remotestorage.js.git",
+    "target": "0.12.1",
+    "commit": "d4955564da5d0e49526deabef7b793005ef461f0"
+  },
+  "requirejs": {
+    "source": "https://github.com/jrburke/requirejs-bower.git",
+    "target": "2.2.0",
+    "commit": "1da07057390909f5422c5fd4fb18b6b57cf92b66"
+  },
+  "requirejs-text": {
+    "source": "https://github.com/requirejs/text.git",
+    "target": "2.0.16",
+    "commit": "4fdd3585dd6f33837bce944a5c26ceb6e34b8060"
+  },
+  "sjcl": {
+    "source": "https://github.com/bitwiseshiftleft/sjcl.git",
+    "target": "1.0.8",
+    "commit": "2a6ed4a22449334de2dd9b4e960af679e0e87303"
+  },
+  "to-markdown": {
+    "source": "https://github.com/domchristie/to-markdown.git",
+    "target": "b49b7b2ee5ca41b793775015932e0b3f42d26269",
+    "commit": "b49b7b2ee5ca41b793775015932e0b3f42d26269"
+  },
+  "tv4": {
+    "source": "https://github.com/geraintluff/tv4.git",
+    "target": "v1.2.7",
+    "commit": "b9cf8fa27978c5a643bd7aea044cad03b476fac9"
+  },
+  "underscore": {
+    "source": "https://github.com/jashkenas/underscore.git",
+    "target": "1.8.3",
+    "commit": "e4743ab712b8ab42ad4ccb48b155034d02394e4d"
+  },
+  "xregexp": {
+    "source": "https://github.com/slevithan/xregexp.git",
+    "target": "v3.1.1",
+    "commit": "1f58b9208bd3255114785a0822dbbe22e6eabb97"
+  },
+  "xss": {
+    "source": "https://github.com/leizongmin/js-xss.git",
+    "target": "v0.2.18",
+    "commit": "848c7ffc203575aec37576ea8026bba25c18816b"
+  }
+}

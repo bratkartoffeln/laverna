@@ -1,0 +1,16 @@
+{
+	auto_https disable_redirects
+	servers {
+		protocols h1 h2
+	}
+}
+
+{$LAVERNA_DOMAIN:flusensieb.dns.navy} {
+	tls {
+		dns dynv6 {env.DYNV6_API_TOKEN}
+		resolvers 1.1.1.1 8.8.8.8
+		propagation_timeout 5m
+	}
+
+    reverse_proxy laverna:3000
+}

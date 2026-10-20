@@ -1,0 +1,15 @@
+.git
+.tmp
+.vscode
+**/node_modules
+app/bower_components
+test/bower_components
+release
+**/.env
+**/.env.*
+!**/.env.example
+**/secrets
+**/data
+**/*.sqlite*
+**/*token*
+nas/deploy/caddy-dynv6

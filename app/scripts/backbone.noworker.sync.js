@@ -40,6 +40,9 @@ define([
          * @type object data
          */
         _emit: function(msg, data) {
+            if (window.LAVERNA_NAS) {
+                data.options.namespace = 'nas-' + window.LAVERNA_NAS.user.id + '/';
+            }
             return DB[msg](data);
         }
 

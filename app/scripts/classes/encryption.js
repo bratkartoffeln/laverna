@@ -384,7 +384,7 @@ define([
         _getSessionKey: function() {
             var profile = Radio.request('uri', 'profile') || 'default';
             profile = (Number(this.configs.useDefaultConfigs) ? 'default' : profile);
-            return 'secureKey.' + profile;
+            return 'secureKey.' + (window.LAVERNA_NAS ? 'nas-' + window.LAVERNA_NAS.user.id + '.' : '') + profile;
         }
 
     });

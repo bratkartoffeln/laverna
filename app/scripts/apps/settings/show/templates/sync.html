@@ -5,11 +5,24 @@
     <div class="col-sm-10">
         <select class="form-control show-onselect" data-option="dropbox" name="cloudStorage" id="cloudStorage">
             <option value="0">{{ i18n('No') }}</option>
+            <option value="nas"<%if(models.cloudStorage === 'nas'){ %> selected<% } %>>NAS (Laverna-Konto)</option>
             <option data-show="#group-dropboxKey" value="dropbox"<% if(models.cloudStorage === 'dropbox'){ %> selected<% } %>>Dropbox</option>
             <option value="remotestorage"<%if(models.cloudStorage === 'remotestorage'){ %> selected<% } %>>RemoteStorage</option>
         </select>
     </div>
 </div>
+
+<% if (window.LAVERNA_NAS) { %>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <p>NAS-Synchronisierung als <strong>{{ window.LAVERNA_NAS.user.username }}</strong>. Notizen, Notizbücher, Tags, Anhänge und Papierkorb werden alle 15 Sekunden sowie nach dem Speichern abgeglichen.</p>
+        <p><a href="/account">Konto und Benutzer verwalten</a></p>
+        <p>Bei aktivierter Laverna-Verschlüsselung müssen auf allen Geräten dieselben Einstellungen importiert werden. Das Verschlüsselungspasswort bleibt getrennt von der NAS-Anmeldung.</p>
+        <button type="button" class="btn btn-default" id="nas-import-local">Bisherige lokale Notizen dieses Browsers übernehmen</button>
+        <p class="help-block" id="nas-import-result">Die bisherigen Browserdaten bleiben erhalten. Verwende diesen Import nur für deine eigenen Notizen; bei verschlüsselten Daten zuerst die bisherigen Laverna-Einstellungen importieren.</p>
+    </div>
+</div>
+<% } %>
 
 <div class="form-group <% if (models.cloudStorage !== 'dropbox') { %> hidden<% } %>" id="group-dropboxKey">
     <label class="col-sm-2 control-label" for="dropboxKey">

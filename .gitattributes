@@ -1,1 +1,9 @@
 * text=auto
+*.sh text eol=lf
+nas/**/Dockerfile text eol=lf
+nas/Caddyfile.dns text eol=lf
+nas/*.yaml text eol=lf
+Dockerfile text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.js text eol=lf

@@ -4,7 +4,7 @@ import { execFile as callback, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 import { pipeline } from 'node:stream/promises';
 import { Readable } from 'node:stream';
-import { join, resolve, relative } from 'node:path';
+import { join, resolve, relative, isAbsolute } from 'node:path';
 const execFile = promisify(callback);
 export const REPOSITORY = 'bratkartoffeln/laverna', BRANCH = 'master', PROJECT = 'laverna', CONTAINER = 'laverna-laverna-1';
 const API = 'https://api.github.com/repos/' + REPOSITORY;
@@ -107,7 +107,8 @@ export class Updater {
   async recover() {
     const journal=await jsonFile(join(this.stateRoot,'activation.json'));
     if(!journal)return;
-    if(!journal.oldImage?.startsWith('sha256:')||!validSHA(journal.sha)||relative(join(this.stateRoot,'backups'),journal.backup).startsWith('..')||resolve(journal.backup)===resolve(this.stateRoot,'backups'))throw Error('Invalid recovery journal');
+    const backupRelative=typeof journal.backup==='string'?relative(join(this.stateRoot,'backups'),journal.backup):'..';
+    if(!journal.oldImage?.startsWith('sha256:')||!validSHA(journal.sha)||backupRelative.startsWith('..')||isAbsolute(backupRelative)||!backupRelative)throw Error('Invalid recovery journal');
     this.log('Recovering interrupted activation '+journal.sha);
     await this.restore(journal.backup);await this.compose(journal.oldImage);
     const state=journal.previousState || {};state.failed_sha=journal.sha;state.last_error='Interrupted activation rolled back';await atomicJSON(join(this.stateRoot,'state.json'),state);

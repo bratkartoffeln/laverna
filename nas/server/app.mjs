@@ -11,6 +11,7 @@ export async function application({ dataDirectory, webDirectory, accountDirector
   const rate = new Map();
   let hashing = 0;
   let mutations = 0;
+  let maintenanceRequested = false;
   const maintenanceFile = resolve(dataDirectory, '.update-maintenance');
   const maintenance = async () => { try { await stat(maintenanceFile); return true; } catch (e) {if(e.code !== 'ENOENT')throw e; return false;} };
   const limitedHash = async fn => {
@@ -32,11 +33,15 @@ export async function application({ dataDirectory, webDirectory, accountDirector
       if (path === '/internal/maintenance' && req.method === 'POST') {
         if (!['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress)) fail(403, 'Nur lokal verfügbar.');
         if (url.searchParams.get('action') === 'enter') {
+          maintenanceRequested = true;
           await writeFile(maintenanceFile, 'NAS update in progress\n', {mode:0o600});
           const until = Date.now() + 10000;
           while (mutations && Date.now() < until) await new Promise(r => setTimeout(r, 50));
           if (mutations) fail(503, 'Schreibvorgänge noch aktiv.');
-        } else if (url.searchParams.get('action') === 'exit') await unlink(maintenanceFile).catch(e => {if(e.code !== 'ENOENT') throw e;});
+        } else if (url.searchParams.get('action') === 'exit') {
+          await unlink(maintenanceFile).catch(e => {if(e.code !== 'ENOENT') throw e;});
+          maintenanceRequested = false;
+        }
         else fail(400, 'Aktion fehlt.');
         return send(res, 200, {maintenance:await maintenance()});
       }
@@ -50,7 +55,7 @@ export async function application({ dataDirectory, webDirectory, accountDirector
         if (req.method !== 'GET') {
           const origins = new Set([publicUrl && new URL(publicUrl).origin, 'http://' + req.headers.host]);
           if (!origins.has(req.headers.origin) || req.headers['x-laverna-request'] !== '1' || !/^application\/json\b/.test(req.headers['content-type'] || '')) fail(403, 'Anfrage nicht erlaubt.');
-          if (await maintenance()) fail(503, 'NAS-Update läuft. Änderungen bleiben lokal und werden gleich erneut synchronisiert.');
+          if (maintenanceRequested || await maintenance() || maintenanceRequested) fail(503, 'NAS-Update läuft. Änderungen bleiben lokal und werden gleich erneut synchronisiert.');
           mutations++; counted = true;
         }
         let body = {};

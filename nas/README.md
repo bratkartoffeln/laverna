@@ -44,7 +44,7 @@ Kontozuordnung werden nicht automatisch einem Benutzer zugeschlagen. Unter
 **Einstellungen → Synchronisierung → Bisherige lokale Notizen dieses Browsers
 übernehmen** kann der Besitzer sie ausdrücklich übernehmen. Alte Daten bleiben
 erhalten. Daten von einer anderen Adresse zuerst dort exportieren und anschließend
-in das angemeldete NAS-Konto importieren. F?r weitere Profile zuerst das entsprechende
+in das angemeldete NAS-Konto importieren. Für weitere Profile zuerst das entsprechende
 Profil anlegen/auswählen; auf dem Server bekannte Profile werden in der Profilliste ergänzt.
 
 ## Optionale Laverna-Verschlüsselung
@@ -58,7 +58,7 @@ Anhänge übertragen. Das Verschlüsselungspasswort wird nicht an den NAS-Dienst
 Auf allen Geräten dieselben Laverna-Einstellungen importieren und dasselbe
 Verschlüsselungspasswort verwenden. Abweichende Einstellungen blockieren den
 Abgleich, um einen gemischten Datenbestand zu verhindern. Die Verschlüsselung
-vor dem ersten Upload einrichten. F?r einen späteren Wechsel der Verschlüsselung
+vor dem ersten Upload einrichten. Für einen späteren Wechsel der Verschlüsselung
 ein neues Profil verwenden und die Notizen dorthin übernehmen. Einstellungen
 und Verschlüsselungspasswort zusätzlich sichern.
 

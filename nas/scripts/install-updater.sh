@@ -14,5 +14,5 @@ chmod 700 "$laverna_state"
 for laverna_file in core.mjs main.mjs Dockerfile compose.updater.yaml; do
     cp "$laverna_source/$laverna_file" "$laverna_runtime/$laverna_file"
 done
-docker build -t laverna-updater:2.0.0 "$laverna_runtime"
+docker build -t laverna-updater:2.0.1 "$laverna_runtime"
 docker compose -p laverna-updater -f "$laverna_runtime/compose.updater.yaml" up -d --wait --wait-timeout 240

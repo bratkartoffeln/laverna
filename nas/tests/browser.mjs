@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 import { application } from '../server/app.mjs';
 
 const directory = await mkdtemp(join(tmpdir(),'laverna-browser-'));
-const app = await application({dataDirectory:directory,webDirectory:resolve('release/laverna-nas/web'),secureCookies:false});
+const app = await application({dataDirectory:directory,webDirectory:fileURLToPath(new URL('../../release/laverna-nas/web', import.meta.url)),secureCookies:false});
 await app.store.createUser('alice','test-browser-password-123',true,app.store.setupToken);
 await app.store.createUser('bob','other-browser-password-123');
 await app.store.createUser('charlie','encrypted-account-password-123');
@@ -63,7 +64,7 @@ try {
   assert.ok(rows.some(r=>r.data.title==='First concurrent'));assert.ok(rows.some(r=>r.data.title==='Second concurrent (Konfliktkopie)'));
   await two.page.reload();await two.page.waitForSelector('#header--add');await waitNote(two.page,id,'First concurrent');
   // Cookie switch in the same browser must select a new IndexedDB namespace.
-  await one.page.goto(origin+'/account');await one.page.locator('#logout').click();await one.page.waitForSelector('#login-form input[name=username]');
+  await one.page.goto(origin+'/account');await one.page.locator('#account-logout').click();await one.page.waitForSelector('#login-form input[name=username]');
   await one.page.locator('#login-form input[name=username]').fill('bob');await one.page.locator('#login-form input[name=password]').fill('other-browser-password-123');await one.page.locator('#login-form button').click();await one.page.waitForSelector('#header--add');
   await one.page.waitForFunction(()=>window.LAVERNA_NAS?.user.username==='bob');
   assert.equal(await local(one.page,id),null);
@@ -88,6 +89,13 @@ try {
   for(const device of [encryptedOne,encryptedTwo])await device.page.evaluate(()=>requirejs('backbone.radio').request('sync','start'));
   await new Promise(r=>setTimeout(r,1500));
   assert.deepEqual(app.store.snapshot(encryptedUser,'notes-db').records.map(r=>r.rev),revisionsBefore);
+  // NAS account switching must remain accessible while note encryption is locked.
+  await encryptedOne.page.evaluate(()=>requirejs('backbone.radio').request('encrypt','delete:secureKey'));
+  await encryptedOne.page.reload();
+  await encryptedOne.page.locator('.nas-session-link').click();
+  await encryptedOne.page.locator('#session:not([hidden])').waitFor();
+  await encryptedOne.page.locator('#logout').click();
+  await encryptedOne.page.locator('#login-form').waitFor();
   assert.deepEqual(errors,[]);
   console.log('Browser tests passed: login, editor save, two devices, attachments, offline/conflicting edits, reload, account isolation, encrypted notes and attachments.');
 } finally {await browser.close();await app.close();await rm(directory,{recursive:true,force:true});}

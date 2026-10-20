@@ -1,0 +1,1 @@
+Die projektweiten Regeln stehen in [AGENTS.md](../AGENTS.md). Insbesondere vor Änderungen auf `master` einen freien Versionsbranch mit der nächsten NAS-Patchversion anlegen und die NAS-/Serverversionen gemäß dieser Datei gemeinsam pflegen.

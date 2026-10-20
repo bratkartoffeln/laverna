@@ -1,0 +1,44 @@
+<section aria-labelledby="account-title">
+    <h2 id="account-title">NAS-Konto</h2>
+    <p class="help-block">Verwalte deine Anmeldung und den Zugriff auf die NAS-Synchronisierung.</p>
+    <div id="account-message" class="alert nas-account-status" role="status" aria-live="polite"></div>
+    <div id="account-loading" class="help-block">Konto wird geladen …</div>
+    <div id="account-details" hidden>
+        <div class="nas-account-summary">
+            <p><i class="icon-key" aria-hidden="true"></i> Angemeldet als <strong id="account-identity"></strong> <span id="account-role" class="label label-default"></span></p>
+            <p class="help-block">Deine Notizen bleiben deinem Konto zugeordnet. Auf deinen anderen Geräten verwendest du dieselbe Anmeldung.</p>
+            <button type="button" id="account-logout" class="btn btn-default"><i class="icon-left-open" aria-hidden="true"></i> Abmelden</button>
+        </div>
+        <section class="nas-account-section" aria-labelledby="account-password-title">
+            <h3 id="account-password-title">Passwort ändern</h3>
+            <p class="help-block">Das Passwort für die NAS-Anmeldung ist unabhängig vom Laverna-Verschlüsselungspasswort. Nach der Änderung meldest du dich auf deinen Geräten neu an.</p>
+            <form id="account-password-form" class="form-horizontal">
+                <div class="form-group">
+                    <label for="account-current-password" class="col-sm-3 control-label">Bisheriges Passwort</label>
+                    <div class="col-sm-9"><input id="account-current-password" name="currentPassword" class="form-control" type="password" autocomplete="current-password" required></div>
+                </div>
+                <div class="form-group">
+                    <label for="account-new-password" class="col-sm-3 control-label">Neues Passwort</label>
+                    <div class="col-sm-9"><input id="account-new-password" name="password" class="form-control" type="password" autocomplete="new-password" minlength="12" required aria-describedby="account-password-help"><p id="account-password-help" class="help-block">Mindestens zwölf Zeichen.</p></div>
+                </div>
+                <div class="form-group"><div class="col-sm-offset-3 col-sm-9"><button class="btn btn-success" type="submit"><i class="icon-lock" aria-hidden="true"></i> Passwort ändern</button></div></div>
+            </form>
+        </section>
+        <section id="account-admin" class="nas-account-section" aria-labelledby="account-users-title" hidden>
+            <h3 id="account-users-title">Benutzerverwaltung</h3>
+            <p class="help-block">Jede Person erhält einen eigenen Notizbestand. Gesperrte Konten behalten ihre Daten und können später wieder freigegeben werden.</p>
+            <form id="account-create-form" class="form-horizontal">
+                <div class="form-group">
+                    <label for="account-username" class="col-sm-3 control-label">Benutzername</label>
+                    <div class="col-sm-9"><input id="account-username" name="username" class="form-control" autocomplete="off" pattern="[a-zA-Z0-9][a-zA-Z0-9_.\-]{2,63}" minlength="3" maxlength="64" required aria-describedby="account-username-help"><p id="account-username-help" class="help-block">3–64 Zeichen: Buchstaben, Zahlen, Punkt, Unterstrich oder Bindestrich.</p></div>
+                </div>
+                <div class="form-group">
+                    <label for="account-start-password" class="col-sm-3 control-label">Startpasswort</label>
+                    <div class="col-sm-9"><input id="account-start-password" name="password" class="form-control" type="password" autocomplete="new-password" minlength="12" required aria-describedby="account-start-password-help"><p id="account-start-password-help" class="help-block">Mindestens zwölf Zeichen. Die Person kann es nach der Anmeldung ändern.</p></div>
+                </div>
+                <div class="form-group"><div class="col-sm-offset-3 col-sm-9"><button class="btn btn-success" type="submit"><i class="icon-doc-new" aria-hidden="true"></i> Benutzer anlegen</button></div></div>
+            </form>
+            <div id="account-users" aria-live="polite"></div>
+        </section>
+    </div>
+</section>

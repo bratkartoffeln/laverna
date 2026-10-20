@@ -82,12 +82,15 @@
         <% } }); %>
 
         <div class="list-group-item sidemenu--item -disabled">{{i18n('Other')}}</div>
+        <button type="button" id="header--dark-mode" class="list-group-item sidemenu--item appearance-toggle" aria-pressed="{{darkMode}}">
+            <i class="icon-eye" aria-hidden="true"></i> <span class="appearance-toggle-label">Dark-Modus <% if (darkMode) { %>ausschalten<% } else { %>einschalten<% } %></span>
+        </button>
         <a class="list-group-item sidemenu--item" href="#{{uri}}settings">
             <i class="icon-cog"></i>  {{i18n('Settings')}}
         </a>
         <% if (window.LAVERNA_NAS) { %>
-        <a class="list-group-item sidemenu--item" href="/account">
-            <i class="icon-user"></i> NAS-Konto
+        <a class="list-group-item sidemenu--item" href="#{{uri}}settings/account">
+            <i class="icon-key"></i> NAS-Konto
         </a>
         <div class="list-group-item sidemenu--item" id="nas-sync-status" role="status" style="font-size:12px;white-space:normal">NAS-Synchronisierung</div>
         <% } %>

@@ -65,7 +65,8 @@ define([
             'blur @ui.search'        : 'hideSearch',
             'keyup @ui.search'       : 'searchKeyup',
             'submit #header--search' : 'searchSubmit',
-            'click #header--sync'    : 'triggerSync'
+            'click #header--sync'    : 'triggerSync',
+            'click #header--dark-mode': 'toggleTheme'
         },
 
         collectionEvents: {
@@ -73,6 +74,8 @@ define([
         },
 
         initialize: function() {
+            this.refreshTheme = this.refreshTheme.bind(this);
+            window.addEventListener('laverna:appearance', this.refreshTheme);
             this.listenTo(this, 'change:title', this.changeTitle);
             this.listenTo(Radio.channel('global'), 'show:search', this.showSearch);
 
@@ -84,7 +87,16 @@ define([
         },
 
         onDestroy: function() {
+            window.removeEventListener('laverna:appearance', this.refreshTheme);
             Radio.trigger('global', 'search:hidden');
+        },
+
+        toggleTheme: function() { window.LavernaAppearance.toggle(); },
+
+        refreshTheme: function() {
+            var dark = window.LavernaAppearance.isDark();
+            this.$('#header--dark-mode').attr('aria-pressed', String(dark));
+            this.$('.appearance-toggle-label').text(dark ? 'Dark-Modus ausschalten' : 'Dark-Modus einschalten');
         },
 
         triggerSync: function() {
@@ -162,6 +174,7 @@ define([
             return {
                 args      : this.options.args,
                 configs   : this.collection.getConfigs(),
+                darkMode  : window.LavernaAppearance.isDark(),
                 profiles  : this.options.profiles.getValueJSON(),
                 notebooks : _.first(this.options.notebooks.toJSON(), maxNotebooks),
                 uri       : Radio.request('uri', 'link:profile', '/'),

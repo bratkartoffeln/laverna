@@ -1,12 +1,68 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laverna · NAS-Konto</title><link rel="stylesheet" href="/account.css"><script defer src="/account.js"></script></head>
-<body><main><header><span class="brand">Laverna</span><p>Notizen auf deinem NAS</p></header>
-<p id="message" role="status" aria-live="polite"></p>
-<section id="login" hidden><h1>Anmelden</h1><p>Mit demselben Konto bleiben deine Notizen auf deinen Geräten synchron.</p>
-<form id="login-form"><label>Benutzername<input name="username" autocomplete="username" required></label><label>Passwort<input name="password" type="password" autocomplete="current-password" required></label><button>Anmelden</button></form></section>
-<section id="setup" hidden><h1>Administrator einrichten</h1><p>Der Einrichtungsschlüssel liegt auf dem NAS in der Datei <code>/data/setup-token</code> des Laverna-Containers. Nach der Einrichtung wird er gelöscht.</p>
-<form id="setup-form"><label>Einrichtungsschlüssel<input name="setupToken" type="password" autocomplete="off" required></label><label>Benutzername<input name="username" autocomplete="username" minlength="3" required></label><label>Passwort<input name="password" type="password" autocomplete="new-password" minlength="12" required></label><button>Administrator anlegen</button></form></section>
-<section id="account" hidden><h1 id="identity"></h1><p>Deine Notizen und die lokalen Daten dieses Browsers sind deinem Konto zugeordnet.</p><p class="actions"><a class="button" href="/">Notizen öffnen</a><button id="logout" class="secondary">Abmelden</button></p>
-<details><summary>Passwort ändern</summary><form id="password-form"><label>Bisheriges Passwort<input name="currentPassword" type="password" autocomplete="current-password" required></label><label>Neues Passwort<input name="password" type="password" autocomplete="new-password" minlength="12" required></label><button>Passwort ändern und abmelden</button></form></details>
-<section id="admin" hidden><h2>Benutzer verwalten</h2><p>Jedes Konto besitzt einen eigenen Notizbestand. Neue Benutzer können sich nach dem Anlegen direkt anmelden.</p><form id="create-form"><label>Benutzername<input name="username" minlength="3" autocomplete="off" required></label><label>Startpasswort<input name="password" type="password" minlength="12" autocomplete="new-password" required></label><button>Konto anlegen</button></form><div id="users"></div></section>
-</section><footer>Die Synchronisierung überträgt Notizen, Notizbücher, Tags, Anhänge und den Papierkorb. Die NAS-Anmeldung schützt den Zugriff; die optionale Laverna-Verschlüsselung wird separat eingerichtet.</footer></main></body></html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Laverna · NAS-Anmeldung</title>
+    <script src="/scripts/theme.js"></script>
+    <link rel="stylesheet" href="/styles/core.css">
+    <link rel="stylesheet" href="/styles/theme-default.css">
+    <link rel="stylesheet" href="/account.css">
+    <script defer src="/account.js"></script>
+</head>
+<body class="layout--brand nas-auth">
+<main class="container text-center -auth">
+    <header>
+        <h1 class="header--brand"><i class="icon-lock" aria-hidden="true"></i></h1>
+        <h1 class="header--brand">Laverna</h1>
+        <p>Deine Notizen auf dem NAS</p>
+    </header>
+    <p id="message" role="status" aria-live="polite"></p>
+    <section id="login" hidden aria-labelledby="login-title">
+        <h2 id="login-title">Anmelden</h2>
+        <p>Verwende auf allen deinen Geräten dasselbe Konto.</p>
+        <form id="login-form">
+            <div class="form-group">
+                <label class="sr-only" for="login-username">Benutzername</label>
+                <input id="login-username" class="form-control input-lg input--brand" name="username" placeholder="Benutzername" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="login-password">Passwort</label>
+                <input id="login-password" class="form-control input-lg input--brand" name="password" type="password" placeholder="Passwort" autocomplete="current-password" required>
+            </div>
+            <button class="btn btn-lg btn-block btn--brand" type="submit">Anmelden</button>
+        </form>
+    </section>
+    <section id="setup" hidden aria-labelledby="setup-title">
+        <h2 id="setup-title">Administrator einrichten</h2>
+        <p>Lege das erste Konto an. Weitere Personen fügst du anschließend in den Einstellungen hinzu.</p>
+        <form id="setup-form">
+            <div class="form-group">
+                <label class="sr-only" for="setup-token">Einrichtungsschlüssel</label>
+                <input id="setup-token" class="form-control input-lg input--brand" name="setupToken" type="password" placeholder="Einrichtungsschlüssel" autocomplete="off" aria-describedby="setup-key-help" required>
+                <p id="setup-key-help" class="nas-auth-help">Den einmaligen Schlüssel findest du auf dem NAS in der Datei <code>/data/setup-token</code> des Laverna-Containers.</p>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="setup-username">Benutzername</label>
+                <input id="setup-username" class="form-control input-lg input--brand" name="username" placeholder="Benutzername" autocomplete="username" minlength="3" maxlength="64" pattern="[a-zA-Z0-9][a-zA-Z0-9_.\-]{2,63}" required>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="setup-password">Passwort</label>
+                <input id="setup-password" class="form-control input-lg input--brand" name="password" type="password" placeholder="Passwort" autocomplete="new-password" minlength="12" aria-describedby="setup-password-help" required>
+                <p id="setup-password-help" class="nas-auth-help">Mindestens zwölf Zeichen.</p>
+            </div>
+            <button class="btn btn-lg btn-block btn--brand" type="submit">Administrator anlegen</button>
+        </form>
+    </section>
+    <section id="session" hidden aria-labelledby="session-title">
+        <h2 id="session-title">NAS-Anmeldung</h2>
+        <p>Angemeldet als <strong id="identity"></strong></p>
+        <p>Du kannst deine Notizen öffnen oder zu einem anderen Konto wechseln.</p>
+        <p><a class="btn btn-lg btn-block btn--brand" href="/">Notizen öffnen</a></p>
+        <p><a class="nas-auth-link" href="/#/settings/account">Konto verwalten</a></p>
+        <button id="logout" class="btn btn-lg btn-block btn--brand" type="button">Abmelden</button>
+    </section>
+    <footer>Jede Person hat einen eigenen Notizbestand. Dein Konto synchronisiert ihn zwischen deinen Geräten.</footer>
+</main>
+</body>
+</html>

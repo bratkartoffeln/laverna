@@ -204,7 +204,11 @@ define([
                     return;
                 }
 
-                return self.save(model, data)
+                // NAS revisions identify the encrypted payload itself. Preserve
+                // its original IV/ciphertext when importing a remote revision.
+                var saving = options && options.preserveCiphertext && data.encryptedData ?
+                    new Q(model.save(data, {validate: false})) : self.save(model, data);
+                return saving
                 .then(self.decryptModel)
                 .then(function(model) {
                     self.vent.trigger('update:model', model);

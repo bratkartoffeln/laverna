@@ -31,7 +31,7 @@ jobs:
       - run: node nas/tests/browser.mjs
       - name: Build and verify production container
         run: |
-          docker build --build-arg LAVERNA_REVISION="$GITHUB_SHA" -f nas/deploy/Dockerfile.app -t laverna-ci release/laverna-nas
+          docker build --build-arg LAVERNA_REVISION="$GITHUB_SHA" -t laverna-ci .
           docker run -d --name laverna-ci --network none --read-only --tmpfs /data:uid=1000,gid=1000,mode=0700 laverna-ci
           for attempt in $(seq 1 30); do
             if docker exec laverna-ci node -e "fetch('http://127.0.0.1:3000/ready.json').then(r=>r.json()).then(j=>{if(!j.sync||j.sourceRevision!==process.env.LAVERNA_REVISION)process.exit(1)})"; then exit 0; fi

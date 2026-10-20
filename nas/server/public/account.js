@@ -40,7 +40,12 @@ form('login-form', async body => { session = await api('login', body); location.
 form('setup-form', async body => { session = await api('setup', body); location.assign('/account'); });
 form('create-form', async body => { await api('users', {...body,action:'create'}); message('Konto angelegt.'); await users(); });
 form('password-form', async body => { await api('password',body); location.assign('/account'); });
-el('logout').onclick = async () => { try { await api('logout',{}); location.assign('/account'); } catch (e) {message(e.message,true);} };
+el('logout').onclick = async () => { try {
+  await api('logout',{});
+  const prefix='secureKey.nas-'+session.user.id+'.';
+  Object.keys(sessionStorage).filter(k=>k.startsWith(prefix)).forEach(k=>sessionStorage.removeItem(k));
+  location.assign('/account');
+} catch (e) {message(e.message,true);} };
 (async () => {
   const status = await api('status');
   if (status.setupRequired) { el('setup').hidden = false; return; }

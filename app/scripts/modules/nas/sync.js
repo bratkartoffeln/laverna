@@ -35,7 +35,7 @@ define(['underscore', 'marionette', 'backbone.radio', 'localforage'], function(_
         if (record.collection === 'files' && typeof data.src === 'string' && data.src.startsWith('data:')) {
             var blob = await fetch(data.src).then(function(r){return r.blob();}); data.src=blob;
         }
-        return Radio.request(record.collection,'save:raw',data,{profile:profile});
+        return Radio.request(record.collection,'save:raw',data,{profile:profile,preserveCiphertext:true});
     }
     function cryptoConfigs() {
         var config = Radio.request('configs', 'get:object');

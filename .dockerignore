@@ -7,6 +7,7 @@ test/bower_components
 release
 **/.env
 **/.env.*
+!**/.env.example
 **/secrets
 **/data
 **/*.sqlite*

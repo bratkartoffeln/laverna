@@ -71,13 +71,15 @@ export async function application({ dataDirectory, webDirectory, accountDirector
         }
         if (req.method === 'GET' && path === '/api/status') return send(res, 200, { setupRequired: !store.hasUsers() });
         if (req.method === 'POST' && (path === '/api/login' || path === '/api/setup')) {
-          const key = req.socket.remoteAddress;
+          const keys = [req.socket.remoteAddress, 'user:' + String(body.username || '').toLowerCase().slice(0,64)];
           const now = Date.now();
           if (rate.size > 2000) for (const [k,v] of rate) if (v.until < now) rate.delete(k);
-          const bucket = rate.get(key) || { attempts: 0, until: now + 15 * 60000 };
-          if (bucket.until < now) { bucket.attempts = 0; bucket.until = now + 15 * 60000; }
-          if (++bucket.attempts > 20) { rate.set(key, bucket); fail(429, 'Zu viele Anmeldeversuche. Bitte in 15 Minuten erneut versuchen.'); }
-          rate.set(key, bucket);
+          for (const key of keys) {
+            const bucket = rate.get(key) || { attempts: 0, until: now + 15 * 60000 };
+            if (bucket.until < now) { bucket.attempts = 0; bucket.until = now + 15 * 60000; }
+            if (++bucket.attempts > (key.startsWith('user:') ? 20 : 100)) { rate.set(key, bucket); fail(429, 'Zu viele Anmeldeversuche. Bitte in 15 Minuten erneut versuchen.'); }
+            if (rate.size < 5000 || rate.has(key)) rate.set(key, bucket); else fail(429, 'Zu viele Anmeldungen. Bitte später erneut versuchen.');
+          }
           const login = await limitedHash(async () => {
             if (path === '/api/setup') {
               if (typeof body.setupToken !== 'string' || body.setupToken.length > 256) fail(403, 'Einrichtungsschlüssel fehlt.');
@@ -85,7 +87,7 @@ export async function application({ dataDirectory, webDirectory, accountDirector
             }
             return store.login(body.username, body.password);
           });
-          rate.delete(key);
+          rate.delete(keys[1]);
           res.setHeader('Set-Cookie', cookie(login.token));
           return send(res, 200, { user: login.user, csrf: login.csrf });
         }

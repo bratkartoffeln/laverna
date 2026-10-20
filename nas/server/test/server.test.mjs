@@ -53,6 +53,21 @@ test('Users cannot read, modify, enumerate or receive another account’s record
   assert.equal((await request('/api/sync',{profile:'notes-db',crypto,changes:[change('secret','Alice')]},alice)).status,200);
   assert.equal((await request('/api/sync',null,owner)).data.records[0].data.title,'Private');
 });
+
+test('Account entry opens native settings while session switching remains available before unlocking notes',async t=>{
+  const {request,owner}=await fixture(t);
+  const login=await request('/account');
+  assert.equal(login.status,200);
+  assert.match(login.data,/\/styles\/core\.css/);
+  assert.match(login.data,/\/styles\/theme-default\.css/);
+  const account=await request('/account',null,owner);
+  assert.equal(account.status,302);
+  assert.equal(account.headers.get('location'),'/#/settings/account');
+  const session=await request('/account?session',null,owner);
+  assert.equal(session.status,200);
+  assert.match(session.data,/id="logout"/);
+  assert.match(session.headers.get('content-security-policy'),/font-src 'self' data:/);
+});
 test('Cross-site requests, missing CSRF and a changed browser account fail closed',async t=>{
   const {request,owner}=await fixture(t);
   const body={profile:'notes-db',crypto,changes:[change('n','Title')]};

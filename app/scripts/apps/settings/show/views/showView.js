@@ -22,7 +22,7 @@ define([
         template: _.template(Tmpl),
 
         regions: {
-            content: 'form'
+            content: '.settings--content'
         },
 
         behaviors: {

@@ -8,6 +8,9 @@
             <i class="icon-pencil"></i>
             {{i18n('Editor')}}
         </a>
+        <a class="list-group-item list--settings" href="#{{uri}}settings/appearance">
+            <i class="icon-eye"></i> Ansicht
+        </a>
         <a class="list-group-item list--settings" href="#{{uri}}settings/encryption">
             <i class="icon-lock"></i>
             {{i18n('Encryption')}}
@@ -20,6 +23,11 @@
             <i class="icon-arrows"></i>
             {{i18n('Sync')}}
         </a>
+        <% if (window.LAVERNA_NAS) { %>
+        <a class="list-group-item list--settings" href="#{{uri}}settings/account">
+            <i class="icon-key"></i> NAS-Konto
+        </a>
+        <% } %>
         <a class="list-group-item list--settings" href="#{{uri}}settings/profiles">
             <i class="icon-notebook"></i>
             {{i18n('Profiles')}}

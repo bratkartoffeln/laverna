@@ -127,8 +127,11 @@ export async function application({ dataDirectory, webDirectory, accountDirector
         return send(res, 200, { ...info, sourceRevision: revision, sync: true, schema: 1 });
       }
       if (['/account', '/account.js', '/account.css'].includes(path)) {
+        if (path === '/account' && user && !url.searchParams.has('session')) {
+          res.writeHead(302, {Location:'/#/settings/account'}); res.end(); return;
+        }
         const name = path === '/account' ? 'account.html' : path.slice(1);
-        res.setHeader('Content-Security-Policy', "default-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
+        res.setHeader('Content-Security-Policy', "default-src 'self'; font-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
         res.setHeader('Content-Type', mime[extname(name)]);
         res.end(await readFile(new URL(name, accountDirectory))); return;
       }

@@ -1,0 +1,32 @@
+// Account settings use the application's Bootstrap forms, buttons and grid.
+.nas-account {
+    max-width: 900px;
+    padding-bottom: 30px;
+
+    .nas-account-summary { margin: 0 0 30px; }
+    .nas-account-section { margin-top: 35px; }
+    .nas-account-user {
+        padding: 20px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .nas-account-user-name { font-weight: 600; overflow-wrap: anywhere; }
+    .nas-account-user-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    .nas-account-reset { margin-top: 20px; }
+    .nas-account-user-meta { margin-top: 5px; }
+    .nas-account-status:empty { display: none; }
+    .nas-account-status { white-space: pre-line; }
+    [hidden] { display: none !important; }
+}
+.header .nas-account-heading { margin: 7px 10px; font-size: 16px; }
+.layout--brand .nas-session-link { color: inherit; text-decoration: underline; }
+.appearance-toggle { width: 100%; text-align: left; }
+.appearance-settings { max-width: 700px; }
+.appearance-settings .checkbox { margin: 30px 0 20px; }
+@media (max-width: 767px) {
+    .header.-tab-account .header--left,
+    .header.-tab-appearance .header--left { display: flex; align-items: center; }
+    .header .nas-account-heading { margin: 0 10px; }
+    .nas-account .nas-account-user-actions { justify-content: flex-start; margin-top: 12px; }
+    .nas-account .form-group { margin-bottom: 20px; }
+    .-tab-account + .layout--body .container-fluid.-settings { padding: 25px 15px; }
+}

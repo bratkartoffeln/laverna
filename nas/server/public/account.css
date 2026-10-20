@@ -1,1 +1,18 @@
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#233d39;background:#eef4f2;color-scheme:light}*{box-sizing:border-box}body{margin:0;padding:32px 18px}main{max-width:660px;margin:auto;background:#fff;border:1px solid #d5e2dd;border-radius:14px;padding:32px;box-shadow:0 8px 32px #173f3010}.brand{font-size:30px;letter-spacing:-1px;font-weight:700;color:#006c60}header p{margin-top:4px;color:#667b74}h1{font-size:25px}h2{font-size:21px;margin-top:32px}p{line-height:1.6}label{display:block;margin:18px 0;font-weight:600}input{display:block;width:100%;padding:12px;margin-top:7px;border:1px solid #b8cfc4;border-radius:6px;font:inherit}input:focus{outline:2px solid #5ab7a3;outline-offset:1px}button,.button{display:inline-block;background:#006c60;color:white;border:0;padding:12px 18px;border-radius:6px;font:inherit;cursor:pointer;text-decoration:none}button:disabled{opacity:.5;cursor:wait}.secondary{background:#e7efeb;color:#233d39}.actions{display:flex;gap:12px;flex-wrap:wrap}#message:empty{display:none}#message{padding:14px;border-left:4px solid #006c60;background:#edf6f1}#message.error{border-color:#ab3636;background:#fff1ee;color:#852b2b}details{margin-top:30px}summary{cursor:pointer}footer{font-size:13px;line-height:1.6;color:#667b74;margin-top:32px;border-top:1px solid #e0e9e3;padding-top:20px}.user{padding:18px 0;border-bottom:1px solid #d5e2dd}.user button{margin:8px 8px 0 0;font-size:14px}code{overflow-wrap:anywhere}[hidden]{display:none!important}@media(max-width:500px){main{padding:22px}body{padding:16px 10px}}
+/* Reuse Laverna's brand screen, typography, fields and buttons. */
+.layout--brand.nas-auth { display: block; min-height: 100vh; overflow-y: auto; }
+.nas-auth .container.-auth { padding-top: 6vh; padding-bottom: 35px; }
+.nas-auth header { margin-bottom: 30px; }
+.nas-auth h2 { font-size: 24px; margin-bottom: 15px; }
+.nas-auth section > p { margin-bottom: 25px; }
+.nas-auth .form-group { margin-bottom: 22px; }
+.nas-auth .nas-auth-help { text-align: left; font-size: 13px; margin-top: 10px; }
+.nas-auth code { color: inherit; background: transparent; overflow-wrap: anywhere; }
+.nas-auth .nas-auth-link { color: inherit; text-decoration: underline; }
+.nas-auth #message:empty { display: none; }
+.nas-auth #message { border: 1px solid currentColor; padding: 12px; margin: 20px 0; }
+.nas-auth #message.error { border-width: 2px; }
+.nas-auth footer { margin-top: 35px; font-size: 13px; line-height: 1.6; }
+.nas-auth [hidden] { display: none !important; }
+@media (max-width: 480px) {
+    .nas-auth .container.-auth { padding-top: 25px; padding-left: 25px; padding-right: 25px; }
+}

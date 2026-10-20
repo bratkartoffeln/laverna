@@ -12,9 +12,13 @@ SQLite; ein zusätzlicher Datenbankcontainer ist nicht erforderlich.
 ## Anmeldung und Konten
 
 Auf der Browseradresse anmelden. Auf einem neuen Gerät ist die
-NAS-Synchronisierung automatisch aktiviert. Unter **NAS-Konto** können Benutzer
+NAS-Synchronisierung automatisch aktiviert. Unter **Einstellungen → NAS-Konto** können Benutzer
 ihr Passwort ändern oder sich abmelden. Der Administrator kann dort Konten
 anlegen, sperren und Passwörter zurücksetzen. Es gibt keine öffentliche Registrierung.
+Die Kontoverwaltung ist Teil des gewohnten Laverna-Layouts. Auch der Eintrag
+**NAS-Konto** im Seitenmenü und die Adresse `/account` führen zu diesem Reiter.
+Am Verschlüsselungsbildschirm ermöglicht **NAS-Anmeldung wechseln** den Kontowechsel,
+ohne zuvor die Notizen entsperren zu müssen.
 Passwörter benötigen mindestens zwölf Zeichen und werden mit scrypt gespeichert.
 Die Anmeldung verwendet ein HttpOnly-Cookie; HTTPS ist für den normalen Betrieb erforderlich.
 
@@ -23,6 +27,14 @@ Der Schlüssel liegt im Container unter /data/setup-token, auf diesem NAS unter
 /share/Container/laverna/data/setup-token. Er wird nach erfolgreicher Einrichtung gelöscht.
 Alternativ: docker exec -i laverna-laverna-1 node server/admin.mjs create-admin BENUTZER
 (Passwort auf der Standardeingabe, nicht als Argument).
+
+## Ansicht
+
+Unter **Einstellungen → Ansicht** lässt sich der **Dark-Modus** einschalten.
+Der Schalter **Dark-Modus einschalten/ausschalten** im Seitenmenü unter
+**Sonstiges** ändert die Darstellung direkt. Die Auswahl gilt für diesen Browser,
+bleibt beim Neuladen und Abmelden erhalten und wird auch für die Anmeldung verwendet.
+Notizliste, Editor, Markdown-Vorschau, Dialoge und Kontoverwaltung passen ihre Farben an.
 
 ## Abgleich und bestehende Daten
 
@@ -101,7 +113,7 @@ wird für den NAS-Build nicht benötigt.
     npm test --prefix nas
     node nas/build.js --web-only
     node nas/node_modules/playwright-core/cli.js install chromium
-    node nas/tests/browser.mjs
+    npm run test:browser --prefix nas
 
 Auf Windows kann LAVERNA_BROWSER auf die installierte Edge-EXE zeigen.
 Ein vollständiges Paket samt ZIP/Prüfsumme erzeugt npm run build:nas.

@@ -28,7 +28,7 @@ jobs:
         env:
           LAVERNA_REVISION: ${{ github.sha }}
       - run: node nas/node_modules/playwright-core/cli.js install --with-deps chromium
-      - run: node nas/tests/browser.mjs
+      - run: npm run test:browser --prefix nas
       - name: Build and verify production container
         run: |
           docker build --build-arg LAVERNA_REVISION="$GITHUB_SHA" -t laverna-ci .

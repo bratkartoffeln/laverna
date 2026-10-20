@@ -41,3 +41,9 @@ jobs:
           exit 1
       - if: always()
         run: docker rm -f laverna-ci || true
+      - name: Build and verify updater registry TLS
+        run: |
+          docker build -t laverna-updater-ci nas/updater
+          docker run --rm --entrypoint /usr/local/bin/docker \
+            --mount "type=bind,source=$(command -v docker),target=/usr/local/bin/docker,readonly" \
+            laverna-updater-ci manifest inspect node:24.14.0-bookworm-slim > /dev/null

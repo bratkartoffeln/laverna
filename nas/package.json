@@ -1,6 +1,6 @@
 {
   "name": "laverna-nas-build",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "private": true,
   "description": "Build the existing Laverna web app without the obsolete Gulp/Electron toolchain",
   "scripts": {

@@ -195,6 +195,10 @@ define([
          */
         _emit: function(msg, data) {
 
+            if (window.LAVERNA_NAS) {
+                data.options.namespace = 'nas-' + window.LAVERNA_NAS.user.id + '/';
+            }
+
             // Generate a unique ID for the worker's promise
             var promiseId            = this.guid();
             this.promises[promiseId] = Q.defer();

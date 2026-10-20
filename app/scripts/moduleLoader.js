@@ -61,6 +61,9 @@ define([
             });
 
             switch (Radio.request('configs', 'get:config', 'cloudStorage')) {
+                case 'nas':
+                    modules2Load.push('modules/nas/module');
+                    break;
                 case 'remotestorage':
                     modules2Load.push('modules/remotestorage/module');
                     break;

@@ -21,6 +21,21 @@ define([
     var View = Marionette.ItemView.extend({
         template: _.template(Tmpl),
 
+        events: {
+            'click #nas-import-local': function() {
+                var self = this;
+                if (!window.confirm('Die bisherigen lokalen Notizen dieses Browserprofils in dein angemeldetes NAS-Konto übernehmen?')) return;
+                this.$('#nas-import-local').prop('disabled', true);
+                requirejs(['modules/nas/sync'], function(Sync) {
+                    Sync.importLegacy().then(function() {
+                        self.$('#nas-import-result').text('Übernommen. Die Synchronisierung startet automatisch.');
+                    }).catch(function(error) {
+                        self.$('#nas-import-result').text(error.message || 'Import fehlgeschlagen.');
+                    }).finally(function() { self.$('#nas-import-local').prop('disabled', false); });
+                });
+            }
+        },
+
         behaviors: {
             FormBehavior: {
                 behaviorClass: FormBehavior

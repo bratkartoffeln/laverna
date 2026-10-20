@@ -1,0 +1,28 @@
+services:
+  updater:
+    image: laverna-updater:2.0.0
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30m
+    environment:
+      LAVERNA_BASE: /share/Container/laverna
+      DOCKER_CONFIG: /tmp/docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /share/Container/laverna:/share/Container/laverna
+      - /share/CACHEDEV1_DATA/.qpkg/container-station/usr/bin/.libs/docker:/usr/local/bin/docker:ro
+      - /share/CACHEDEV1_DATA/.qpkg/container-station/usr/local/lib/docker/cli-plugins/docker-compose:/usr/local/lib/docker/cli-plugins/docker-compose:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD", "node", "-e", "const f=require('fs');const t=Number(f.readFileSync('/share/Container/laverna/.laverna-updater/heartbeat','utf8'));if(Date.now()-t>3600000)process.exit(1)"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 180s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"

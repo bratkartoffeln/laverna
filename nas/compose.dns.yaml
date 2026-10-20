@@ -1,0 +1,42 @@
+# QNAP / dynv6, wie bei rps-remake:
+# docker compose -p laverna -f compose.yaml -f compose.dns.yaml --profile https ...
+services:
+  caddy:
+    image: laverna-caddy-dynv6:1.1.1
+    build:
+      context: ./deploy/caddy-dynv6
+      dockerfile: Dockerfile
+    profiles: ["https"]
+    restart: unless-stopped
+    depends_on:
+      laverna:
+        condition: service_healthy
+    environment:
+      LAVERNA_DOMAIN: "${LAVERNA_DOMAIN:-flusensieb.dns.navy}"
+    ports:
+      - "${LAVERNA_HTTPS_PORT:-20443}:443/tcp"
+    volumes:
+      - type: bind
+        source: ./Caddyfile.dns
+        target: /etc/caddy/Caddyfile
+        read_only: true
+        bind:
+          create_host_path: false
+      - caddy_data:/data
+      - caddy_config:/config
+    secrets:
+      - dynv6_api_token
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+secrets:
+  dynv6_api_token:
+    file: "${LAVERNA_DYNV6_TOKEN_FILE:-/share/Container/rps-arena/rps-remake/secrets/dynv6_api_token}"
+
+# Der eigene Projektname trennt diese Volumes von rps-arena.
+volumes:
+  caddy_data:
+  caddy_config:

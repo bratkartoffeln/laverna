@@ -28,6 +28,10 @@ define([
          * @return promise
          */
         init: function() {
+            // Legacy databases have no account owner. Import them explicitly.
+            if (window.LAVERNA_NAS) {
+                return new Q();
+            }
             if (!Modernizr.indexeddb) {
                 return new Q();
             }

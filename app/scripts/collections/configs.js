@@ -87,6 +87,9 @@ define([
          * Migrate configs from localStorage.
          */
         migrateFromLocal: function() {
+            if (window.LAVERNA_NAS) {
+                return;
+            }
             var val;
             _.each(this.configNames, function(value, name) {
                 val = localStorage.getItem('vimarkable.configs-' + name);
@@ -102,6 +105,11 @@ define([
         createDefault: function() {
             var self     = this,
                 promises = [];
+
+            if (window.LAVERNA_NAS) {
+                this.configNames.cloudStorage = 'nas';
+                this.configNames.firstStart = '0';
+            }
 
             _.each(this.configNames, function(value, name) {
                 // Check whether a model already exists

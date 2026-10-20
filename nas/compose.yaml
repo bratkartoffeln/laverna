@@ -1,0 +1,38 @@
+services:
+  laverna:
+    image: laverna-app:2.0.0
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.app
+      args:
+        LAVERNA_REVISION: ${LAVERNA_REVISION:-development}
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 45s
+    ports:
+      - "${LAVERNA_BIND_IP:-0.0.0.0}:${LAVERNA_PORT:-18081}:3000"
+    environment:
+      LAVERNA_PUBLIC_URL: ${LAVERNA_PUBLIC_URL:-https://flusensieb.dns.navy:10443}
+      LAVERNA_SECURE_COOKIES: ${LAVERNA_SECURE_COOKIES:-true}
+    volumes:
+      - type: bind
+        source: ${LAVERNA_DATA_PATH:-../data}
+        target: /data
+        bind:
+          create_host_path: false
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/ready.json').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"

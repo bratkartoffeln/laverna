@@ -10,6 +10,10 @@ cordova/
 release/
 .tmp/
 
+# Lokale NAS-Konfiguration und Zugangsdaten
+nas/.env
+nas/secrets/
+
 # Bower
 app/bower_components
 test/bower_components

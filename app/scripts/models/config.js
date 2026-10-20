@@ -71,7 +71,7 @@ define([
 
             if (_.contains(value, name) === true) {
                 value = _.without(value, name);
-                window.indexedDB.deleteDatabase(name);
+                window.indexedDB.deleteDatabase((window.LAVERNA_NAS ? 'nas-' + window.LAVERNA_NAS.user.id + '/' : '') + name);
                 return this.save({value: JSON.stringify(value)});
             }
         },

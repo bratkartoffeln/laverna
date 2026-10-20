@@ -7,6 +7,7 @@
     "url": "https://github.com/Laverna/laverna"
   },
   "scripts": {
+    "build:nas": "npm ci --prefix nas --ignore-scripts && npm run --prefix nas build",
     "start": "node ./server.js",
     "electron": "NODE_ENV=dev electron .",
     "karma": "./node_modules/.bin/karma start",

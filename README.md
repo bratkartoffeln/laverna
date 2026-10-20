@@ -33,6 +33,8 @@ contributors are free to utilize whatever testing tools they desire.
 
 ## Installation
 ---------------
+Für den Betrieb im Browser über ein NAS siehe [nas/README.md](nas/README.md).
+
 There are several ways to start using Laverna:
 
 1. Open [laverna.cc][10] and start using it. No extra steps are needed.

@@ -10,10 +10,12 @@ Laverna ist per SSH auf QNAS1 eingerichtet und gestartet.
 | Direkter LAN-Zugang | http://192.168.1.5:18081/ |
 | Projektverzeichnis | `/share/Container/laverna/laverna-nas` |
 | Compose-Projekt | `laverna` |
-| Anwendung / NAS-Paket | `0.7.4-RC1` / `1.1.1` |
-| Webcontainer | `laverna-laverna-1`, nginx, healthy |
+| Anwendung / NAS-Paket | `0.7.4-RC1` / `2.0.0` |
+| Anwendungscontainer | `laverna-laverna-1`, Node.js 24 + SQLite |
+| Updater | `laverna-updater-updater-1`, eigener Compose-Stack |
+| Dauerhafte Datenbank | `/share/Container/laverna/data/laverna.sqlite` |
 | HTTPS-Container | `laverna-caddy-1`, `laverna-caddy-dynv6:1.1.1` |
-| Neustartregel | `unless-stopped` fuer beide Container |
+| Neustartregel | `unless-stopped` fuer Anwendung, HTTPS und Updater |
 
 DNS-01 mit Let's Encrypt Staging und die produktive Zertifikatsausstellung
 sind erfolgreich. Das produktive Zertifikat wurde fuer `flusensieb.dns.navy`
@@ -36,9 +38,10 @@ mitgelieferten Providerquellen und fuehren dessen Tests aus.
 Sicherung der vorherigen Konfiguration: `/share/Container/laverna/backups/`.
 
 Geprueft wurden TLS samt Zertifikatsvertrauen ueber LAN und die oeffentliche
-Adresse, die ausgelieferte Anwendungsversion und der echte Browserablauf:
-Ersteinrichtung, Markdown-Notiz anlegen, speichern, neu laden und erneut
-oeffnen. Die Testnotiz lag nur in einem getrennten temporaeren Browserprofil.
+Adresse sowie die neue Anwendung im isolierten NAS-Container. GitHub prueft
+Server, Kontentrennung, Konflikte und Rollback sowie echte Browserablaeufe:
+Editor speichern, zwei Geraete, Anhaenge, Offline-Aenderungen, konkurrierende
+Bearbeitungen, Neuladen, Kontowechsel und verschluesselte Notizen/Anhaenge.
 Die vorhandenen RPS-Container liefen waehrend und nach der Einrichtung weiter.
 
 ## Verwaltung
@@ -52,13 +55,25 @@ sh scripts/qnap.sh check https://flusensieb.dns.navy:10443
 sh scripts/qnap.sh logs
 ```
 
-Nach Uebernahme neuer Paketdateien, unter Beibehaltung der eigenen `.env`:
+Der Updater prueft alle fuenf Minuten den Branch `master`. Nur der neueste
+erfolgreiche Push-Prueflauf von `verify.yml` fuer exakt den neuen Commit
+erlaubt die Aktivierung. SQLite wird davor konsistent gesichert; bei einem
+Fehler werden vorheriges Image und Datenbank wiederhergestellt. Caddy und
+seine Zertifikatsspeicher bleiben beim automatischen Anwendungsupdate bestehen.
+
+Updater-Status und konsistente Datenbanksicherung:
 
 ```sh
 sh scripts/qnap.sh update
+sh scripts/qnap.sh backup
 ```
 
 Die QNAP-Skripte ermitteln den Container-Station-Dockerpfad bei Bedarf selbst.
 Die benannten Zertifikats-Volumes bei Updates erhalten; kein `down -v` nutzen.
-Die Notizen bleiben im Browser des jeweiligen Geraets und sollten mit Laverna
-exportiert werden; das NAS-Hosting richtet keine zentrale Notizablage ein.
+NAS-Synchronisierung ist fuer angemeldete Konten voreingestellt. Jede Person
+hat getrennte Notizen und einen eigenen lokalen Browser-Speicherbereich. Den
+ersten Administrator per lokalem Einrichtungsschluessel anlegen; weitere Konten
+werden unter `NAS-Konto` verwaltet. Alte Browsernotizen koennen ihre Besitzer
+in den Synchronisierungseinstellungen ausdruecklich uebernehmen.
+Der aktuell installierte Commit steht in `ready.json` und im Updater-Zustand
+unter `/share/Container/laverna/.laverna-updater/state.json`.

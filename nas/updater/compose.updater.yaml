@@ -7,11 +7,13 @@ services:
     environment:
       LAVERNA_BASE: /share/Container/laverna
       DOCKER_CONFIG: /tmp/docker
+      DOCKER_BUILDKIT: "1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /share/Container/laverna:/share/Container/laverna
       - /share/CACHEDEV1_DATA/.qpkg/container-station/usr/bin/.libs/docker:/usr/local/bin/docker:ro
       - /share/CACHEDEV1_DATA/.qpkg/container-station/usr/local/lib/docker/cli-plugins/docker-compose:/usr/local/lib/docker/cli-plugins/docker-compose:ro
+      - /share/CACHEDEV1_DATA/.qpkg/container-station/usr/local/lib/docker/cli-plugins/docker-buildx:/usr/local/lib/docker/cli-plugins/docker-buildx:ro
     read_only: true
     tmpfs:
       - /tmp

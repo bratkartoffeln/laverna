@@ -76,11 +76,11 @@ export class Updater {
     const filename=join(this.stateRoot,'logs','build-'+sha+'.log');
     const log=createWriteStream(filename,{mode:0o600});
     const code=await new Promise((yes,no)=>{
-      const child=spawn('docker',['build','--build-arg','LAVERNA_REVISION='+sha,'-t',image,source],{stdio:['ignore','pipe','pipe']});
+      const child=spawn('docker',['build','--build-arg','LAVERNA_REVISION='+sha,'-t',image,source],{stdio:['ignore','pipe','pipe'],timeout:30*60000,killSignal:'SIGTERM'});
       child.stdout.pipe(log,{end:false});child.stderr.pipe(log,{end:false});
       child.once('error',e=>{log.end();no(e);});child.once('close',code=>log.end(()=>yes(code)));
     });
-    if(code!==0){const details=(await readFile(filename,'utf8')).slice(-20000);const error=Error('Image build failed; see '+filename);error.retryable=retryableError(Error(details));throw error;}
+    if(code!==0){const details=(await readFile(filename,'utf8')).slice(-20000);const error=Error('Image build failed; see '+filename);error.retryable=code===null||retryableError(Error(details));throw error;}
   }
   async candidate(image,sha) {
     const name='laverna-check-'+sha.slice(0,12);
@@ -120,7 +120,9 @@ export class Updater {
     const previousState=structuredClone(state);
     const backup=join(this.stateRoot,'backups',Date.now()+'-'+sha+'.sqlite');
     try {
-      const {source,pkg}=await this.prepare(sha);await this.build(source,image,sha);await this.candidate(image,sha);
+      this.log('Downloading verified commit '+sha);
+      const {source,pkg}=await this.prepare(sha);this.log('Building candidate '+sha);await this.build(source,image,sha);await this.candidate(image,sha);
+      this.log('Candidate ready; backing up SQLite and activating '+sha);
       entered=true;await this.maintenance('enter');await this.backup(backup);
       await atomicJSON(join(this.stateRoot,'activation.json'),{sha,oldImage:current.Image,backup,previousState});
       changed=true;await this.compose(image);

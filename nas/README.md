@@ -96,6 +96,10 @@ und die Datenbank wieder her. Auch unterbrochene Aktivierungen werden beim
 Neustart anhand eines Journals zurückgenommen. Proxy, Zertifikate, Token und
 andere NAS-Projekte werden beim automatischen Update nicht verändert.
 
+Das Updater-Image enthält die CA-Zertifikate für die Docker-Registry. Die CI
+prüft den Registry-Zugriff mit der Docker-CLI im Updater-Container; Node.js
+allein würde fehlende Systemzertifikate durch seinen eigenen Zertifikatsspeicher verdecken.
+
 Das öffentliche Repository benötigt für automatische Updates keinen GitHub-Token.
 Optional kann ein Token mit lesendem Repository-/Actions-Zugriff lokal unter
 .laverna-updater/github-deploy.token liegen (Modus 600); niemals ins Repository eintragen.

@@ -27,6 +27,8 @@ define([
             'appLang'            : '',
             'cloudStorage'       : '0',
             'dropboxKey'         : '',
+            'dropboxAccessToken' : '',
+            'noteTemplates'      : [],
             'pagination'         : '10',
             'sortnotes'          : 'created',
             'sortnotebooks'      : 'name',

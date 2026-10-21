@@ -24,10 +24,12 @@
             {{i18n('Sync')}}
         </a>
         <% if (window.LAVERNA_NAS) { %>
+        <% if (window.LAVERNA_NAS.user.admin) { %><a class="list-group-item list--settings" href="#{{uri}}settings/backups"><i class="icon-save"></i> NAS-Sicherungen</a><% } %>
         <a class="list-group-item list--settings" href="#{{uri}}settings/account">
             <i class="icon-key"></i> NAS-Konto
         </a>
         <% } %>
+        <a class="list-group-item list--settings" href="#{{uri}}settings/templates"><i class="icon-doc-new"></i> Notizvorlagen</a>
         <a class="list-group-item list--settings" href="#{{uri}}settings/profiles">
             <i class="icon-notebook"></i>
             {{i18n('Profiles')}}

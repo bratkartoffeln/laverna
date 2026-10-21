@@ -1,0 +1,27 @@
+.nas-tools-dialog {
+    .modal-body { max-height: 75vh; overflow: auto; }
+    .nas-compare-pane label { display: block; width: 100%; }
+    .nas-compare-pane textarea { font-weight: 400; }
+    textarea { font-family: monospace; font-size: 13px; resize: vertical; }
+    .modal-footer { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    .modal-footer .btn { margin: 0; white-space: normal; }
+    .nas-compare { margin-top: 15px; margin-bottom: 15px; }
+}
+.nas-editor-status { font-size: 12px; margin: 3px 0 12px; }
+.editor--form .nas-editor-status { position: fixed; right: 12px; bottom: 8px; z-index: 1010; max-width: 65vw; padding: 5px 9px; margin: 0; background: #fff; border: 1px solid #ddd; border-radius: 3px; pointer-events: none; }
+html[data-theme="dark"] .editor--form .nas-editor-status { background: #1d282b; border-color: #43545a; }
+.nas-template-picker { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.nas-template-picker label { margin: 0; }
+.nas-template-picker select { flex: 1; min-width: 150px; max-width: 320px; }
+.nas-editor-status[data-state="error"] { color: #a33; }
+html[data-theme="dark"] .nas-editor-status[data-state="error"] { color: #ffb2b2; }
+.search-hit { color: #222; background: #ffe47a; padding: 0; }
+html[data-theme="dark"] .search-hit { background: #e8c15b; color: #141b1d; }
+#template-list .btn, #backup-list .btn { margin: 4px; }
+#template-list, #backup-list { margin-top: 15px; overflow-wrap: anywhere; }
+#backup-controls form, #template-form { margin-top: 15px; }
+@media (max-width: 767px) {
+    .header.-note .navbar-right { display: flex; flex-wrap: wrap; }
+    .header.-note .btn.-note { padding: 7px 9px; margin-right: 2px; }
+    .header.-note .note--history, .header.-note .note--conflicts { max-width: 42px; }
+}

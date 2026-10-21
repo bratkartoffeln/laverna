@@ -13,7 +13,8 @@ define([
     'collections/pageable',
     'models/note',
     'fuse',
-], function(_, Backbone, Radio, PageableCollection, Note, Fuse) {
+    'helpers/note-search'
+], function(_, Backbone, Radio, PageableCollection, Note, Fuse, Search) {
     'use strict';
 
     var Notes = PageableCollection.extend({
@@ -87,12 +88,8 @@ define([
                 return this;
             }
 
-            var pattern = new RegExp(letters, 'gim');
-
-            return this.filter(function(model) {
-                pattern.lastIndex = 0;
-                return pattern.test(model.get('title')) || pattern.test(model.get('content'));
-            });
+            var tokens = Search.parse(letters), context = this.searchContext;
+            return (this.fullCollection || this).filter(function(model) { return Search.matches(model.toJSON(),tokens,context); });
         },
 
         fuzzySearch: function(text) {

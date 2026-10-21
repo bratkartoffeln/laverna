@@ -16,8 +16,8 @@ define([
     'behaviors/content',
     'apps/notes/form/behaviors/desktop',
     'apps/notes/form/behaviors/mobile',
-    'mousetrap.global'
-], function($, _, Marionette, Radio, Mousetrap, Tmpl, Behavior, Desktop, Mobile) {
+    'mousetrap.global', 'helpers/note-templates'
+], function($, _, Marionette, Radio, Mousetrap, Tmpl, Behavior, Desktop, Mobile, GlobalKeys, Templates) {
     'use strict';
 
     /**
@@ -73,6 +73,8 @@ define([
         },
 
         events: {
+            'input @ui.title': 'titleChanged',
+            'change #editor--template': 'insertTemplate',
             'click .editor--mode a' : 'switchMode',
 
             // Handle saving
@@ -86,6 +88,11 @@ define([
 
             this.configs = Radio.request('configs', 'get:object');
             this.$body = $('body');
+            this.refreshSyncStatus = this.refreshSyncStatus.bind(this);
+            window.addEventListener('laverna:sync-status',this.refreshSyncStatus);
+            this.listenTo(Radio.channel('notesForm'),'dirty',this.markDirty);
+            this.listenTo(Radio.channel('notes'),'sync:model',function(model) { if (model && model.id === this.model.id) { this.dirty = false; this.saveError = null; this.refreshSyncStatus(); } });
+            this.listenTo(this,'save:error',function(error) { this.saveError = error.message || String(error); this.refreshSyncStatus(); });
 
             // Events and replies
             Radio.channel('notesForm')
@@ -107,6 +114,9 @@ define([
         },
 
         onRendered: function() {
+            var select = this.$('#editor--template');
+            Templates.all().forEach(function(template) { select.append($('<option>').val(template.id).text(template.name)); });
+            this.refreshSyncStatus();
             Radio.trigger('notesForm', 'view:ready');
 
             // Focus on the 'title'
@@ -119,6 +129,8 @@ define([
         },
 
         onBeforeDestroy: function() {
+            clearTimeout(this.titleSaveTimer);
+            window.removeEventListener('laverna:sync-status',this.refreshSyncStatus);
             this._normalMode();
 
             // Trigger an event
@@ -135,6 +147,22 @@ define([
 
         showEditor: function(view) {
             this.editor.show(view);
+        },
+        refreshSyncStatus: function() {
+            var state = window.LavernaSyncStatus || {text:window.LAVERNA_NAS ? 'Lokal gespeichert' : 'Lokale Notiz',state:'local'};
+            if (this.dirty) state = {text:'Änderungen werden lokal gespeichert …',state:'saving'};
+            if (this.saveError) state = {text:'Lokale Speicherung fehlgeschlagen: ' + this.saveError,state:'error'};
+            this.$('.nas-editor-status').text(state.text).attr('data-state',state.state);
+        },
+        markDirty:function() { this.dirty = true; this.saveError = null; this.refreshSyncStatus(); },
+        titleChanged:function() { this.markDirty(); clearTimeout(this.titleSaveTimer); this.titleSaveTimer = setTimeout(this.autoSave,1000); },
+        insertTemplate: function(event) {
+            var template = Templates.all().find(function(item) { return item.id === event.target.value; });
+            var element = this.el.querySelector('.CodeMirror');
+            if (!template || !element || !element.CodeMirror) return;
+            if (!this.ui.title.val().trim()) this.ui.title.val(Templates.fill(template.title || template.name));
+            element.CodeMirror.replaceSelection(Templates.fill(template.content) + '\n');
+            event.target.value = '';
         },
 
         /**

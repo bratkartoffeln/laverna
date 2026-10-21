@@ -1,0 +1,14 @@
+{
+  "id": "/",
+  "name": "Laverna Notizen",
+  "short_name": "Laverna",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#141b1d",
+  "theme_color": "#007164",
+  "icons": [
+    {"src":"/images/icon/icon-310x310.png","sizes":"310x310","type":"image/png"},
+    {"src":"/images/icon/icon-512x512.png","sizes":"512x512","type":"image/png"}
+  ]
+}

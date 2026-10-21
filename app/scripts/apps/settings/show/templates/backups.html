@@ -1,0 +1,18 @@
+<h2 class="h3">NAS-Sicherungen</h2>
+<p>Die Sicherungen enthalten die vollständige NAS-Datenbank. Bei der Wiederherstellung werden Notizen, Notizbücher, Tags und Anhänge der enthaltenen Konten als neue Fassungen übernommen. Konten und der bisherige Notizverlauf bleiben erhalten. Vorher entsteht automatisch eine zusätzliche Sicherung.</p>
+<div id="backup-message" class="alert" role="status" hidden></div>
+<div id="backup-controls" hidden>
+    <form id="backup-schedule-form"><div class="form-group"><label for="backup-interval" class="col-sm-3 control-label">Automatische Sicherung</label><div class="col-sm-9"><select id="backup-interval" class="form-control"><option value="0">Aus</option><option value="24">Täglich</option><option value="168">Wöchentlich</option></select><button type="submit" class="btn btn-default">Intervall speichern</button></div></div></form>
+    <p id="backup-next" class="help-block"></p>
+    <button type="button" class="btn btn-success" id="backup-create">Jetzt sichern</button>
+    <p class="help-block">Sicherungen werden auf dem NAS aufbewahrt und nicht automatisch gelöscht. Downloads enthalten auch Kontodaten; bewahre sie geschützt auf.</p>
+    <div id="backup-list" class="list-group"></div>
+    <form id="backup-restore-form" hidden>
+        <h3 class="h4">Sicherung wiederherstellen</h3><p id="backup-restore-name"></p>
+        <p>Später angelegte Notizen der enthaltenen Profile werden entfernt. Andere angemeldete Geräte übernehmen den wiederhergestellten Stand beim Abgleich; zwischenzeitliche Änderungen bleiben als Konfliktfassungen erhalten.</p>
+        <div class="form-group"><label for="backup-password" class="col-sm-3 control-label">Administratorkennwort</label><div class="col-sm-9"><input id="backup-password" type="password" class="form-control" autocomplete="current-password" required></div></div>
+        <div class="form-group"><label for="backup-confirmation" class="col-sm-3 control-label">WIEDERHERSTELLEN eingeben</label><div class="col-sm-9"><input id="backup-confirmation" class="form-control" pattern="WIEDERHERSTELLEN" required></div></div>
+        <button type="submit" class="btn btn-warning">Geprüft wiederherstellen</button>
+        <button type="button" class="btn btn-default" id="backup-restore-cancel">Abbrechen</button>
+    </form>
+</div>

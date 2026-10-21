@@ -11,7 +11,8 @@ define([
     'backbone.radio',
     'marionette',
     'text!apps/notes/list/templates/sidebarListItem.html',
-], function(_, Radio, Marionette, Tmpl) {
+    'helpers/note-search'
+], function(_, Radio, Marionette, Tmpl, Search) {
     'use strict';
 
     /**
@@ -39,6 +40,7 @@ define([
         initialize: function() {
             this.options.args.page = this.model.collection.state.currentPage;
         },
+        onRender: function() { Search.highlight(this.el,this.options.args.filter === 'search' ? this.options.args.query : ''); },
 
         toggleFavorite: function() {
             Radio.request('notes', 'save', this.model, this.model.toggleFavorite());

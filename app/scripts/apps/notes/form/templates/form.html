@@ -50,6 +50,11 @@
                 <input id="editor--input--title" class="form-control -borderless" name="title"
                     type="text" value="{=cleanXSS(title, true)}" placeholder="{{ i18n('Title') }}" />
             </div>
+            <p class="nas-editor-status text-muted" role="status" aria-live="polite"></p>
+            <div class="form-group nas-template-picker">
+                <label for="editor--template">Vorlage einfügen</label>
+                <select id="editor--template" class="form-control"><option value="">Vorlage auswählen …</option></select>
+            </div>
         </form>
     </div>
     <div id="editor" class="layout--body editor--container"></div>

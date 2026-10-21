@@ -133,13 +133,13 @@ define([
                     'Cmd-U'  : this.listAction,
                     'Ctrl-U' : this.listAction,
 
-                    // Ctrl+d - divider
+                    // Ctrl+G - attach file
                     'Cmd-G'  : this.attachmentAction,
                     'Ctrl-G' : this.attachmentAction,
 
-                    // Ctrl+d - divider
-                    'Cmd-D'  : this.hrAction,
-                    'Ctrl-D' : this.hrAction,
+                    // Shift+Ctrl+- - divider
+                    'Shift-Cmd--'   : this.hrAction,
+                    'Shift-Ctrl--'  : this.hrAction,
 
 					// Ctrl+. - indent line
 					'Ctrl-.' 		: 'indentMore',
@@ -187,6 +187,7 @@ define([
          * Text in the editor changed.
          */
         onChange: function() {
+            Radio.trigger('notesForm','dirty');
 
             // Update the preview
             this.updatePreview();

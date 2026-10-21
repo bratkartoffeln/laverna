@@ -1,12 +1,12 @@
 {
   "name": "laverna-nas-build",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "private": true,
   "description": "Build the existing Laverna web app without the obsolete Gulp/Electron toolchain",
   "scripts": {
     "build": "node build.js",
     "test": "node --test server/test/*.test.mjs updater/*.test.mjs",
-    "test:browser": "node tests/browser.mjs && node tests/account.mjs"
+    "test:browser": "node tests/browser.mjs && node tests/account.mjs && node tests/upstream.mjs && node tests/features.mjs"
   },
   "engines": {
     "node": ">=24.14.0 <25"

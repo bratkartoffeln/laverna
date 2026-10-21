@@ -117,7 +117,15 @@ try {
   await serverNote(historyId,data => data.title === 'Resolved note' && data.content.includes('Alternate content'));
   await serverNote(conflict,data => data.trash === 1);
 
+  // A queued note navigation must not steal focus after switching to Settings.
+  await page.evaluate(async id => {
+    const radio = requirejs('backbone.radio');
+    radio.trigger('notes','model:navigate',await radio.request('notes','get:model',{id}));
+  },historyId);
   await page.goto(origin + '/#/settings/templates');
+  await page.locator('#template-name').waitFor();
+  await page.waitForTimeout(600);
+  assert.ok(page.url().endsWith('/settings/templates'),'Delayed note navigation replaced Settings');
   await page.locator('#template-name').fill('Custom test');
   await page.locator('#template-title').fill('Template {{date}}');
   await page.locator('#template-content').fill('# Custom {{date}}\n\n- [ ] Review');

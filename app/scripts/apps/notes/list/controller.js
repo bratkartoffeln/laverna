@@ -44,21 +44,26 @@ define([
 
             // Listen to events
             this.listenTo(this.radio('appNote'), 'model:active', this.onModelActive, this);
-            this.listenTo(this.radio('notes'), 'model:navigate', _.debounce(this.navigate, 420));
+            this.listenTo(this.radio('notes'), 'model:navigate', this.queueNavigation);
 
             // Fetch notes and show them
             this.filter(options);
         },
 
         onDestroy: function() {
-            this.view.trigger('destroy');
-            this.view.collection.trigger('reset:all');
+            this.stopped = true;
+            clearTimeout(this.navigationTimer);
+            if (this.view) {
+                this.view.trigger('destroy');
+                this.view.collection.trigger('reset:all');
+            }
         },
 
         /**
          * Renders the sidebar view
          */
         show: function(notes) {
+            if (this.stopped) return;
             // Destroy old view
             if (this.view) {
                 this.view.trigger('destroy');
@@ -77,6 +82,7 @@ define([
          * Fetches data from `Notes` collection.
          */
         filter: _.debounce(function(options) {
+            if (this.stopped) return;
             options.profile = options.profile || Radio.request('uri', 'profile');
             var tOptions    = this.view ? this.view.options.args : {},
                 isEqual     = _.isEqual(
@@ -113,7 +119,13 @@ define([
             }
         },
 
+        queueNavigation: function(model) {
+            clearTimeout(this.navigationTimer);
+            this.navigationTimer = setTimeout(function() { this.navigate(model); }.bind(this),420);
+        },
+
         navigate: function(model) {
+            if (this.stopped) return;
             var args = Radio.request('appNote', 'route:args');
 
             /**

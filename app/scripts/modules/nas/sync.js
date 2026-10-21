@@ -78,12 +78,15 @@ define(['underscore', 'marionette', 'backbone.radio', 'localforage'], function(_
             window.addEventListener('online', this.focus); window.addEventListener('focus', this.focus);
             this.run();
         },
-        status: function(text, error) {
+        status: function(text, error, state) {
             this.lastStatus = text;
             var element = document.getElementById('nas-sync-status');
-            if (element) { element.textContent = text; element.style.color = error ? '#a33' : ''; }
+            if (element) { element.textContent = text; element.classList.toggle('text-danger',Boolean(error)); }
+            window.LavernaSyncStatus = {text:text,state:state || (error ? 'error' : 'synced')};
+            window.dispatchEvent(new CustomEvent('laverna:sync-status'));
         },
         schedule: function() {
+            this.status('Lokal gespeichert · Synchronisierung ausstehend',false,'pending');
             clearTimeout(this.timer);
             if (this.running) { this.again = true; return; }
             this.timer = setTimeout(this.run.bind(this), 800);
@@ -91,8 +94,14 @@ define(['underscore', 'marionette', 'backbone.radio', 'localforage'], function(_
         run: async function() {
             if (this.running) { this.again = true; return; }
             this.running = true; clearTimeout(this.timer); Radio.trigger('sync', 'start', 'nas');
+            this.status('Wird mit dem NAS synchronisiert …',false,'syncing');
             var conflicts = false;
             try {
+                if (window.LAVERNA_NAS.offline) {
+                    var session = await fetch('/api/me').then(function(response) { if (!response.ok) throw new Error('NAS-Anmeldung erforderlich.'); return response.json(); });
+                    if (session.user.id !== window.LAVERNA_NAS.user.id) throw new Error('Das angemeldete Konto hat sich geändert. Bitte neu laden.');
+                    window.LAVERNA_NAS.csrf = session.csrf; window.LAVERNA_NAS.offline = false;
+                }
                 var base = await this.cache.getItem('base') || {};
                 var before = await local(this.profile);
                 var remote = await api('sync?profile=' + encodeURIComponent(this.profile));
@@ -144,9 +153,10 @@ define(['underscore', 'marionette', 'backbone.radio', 'localforage'], function(_
                     base[k] = {rev:record.rev,hash:hash};
                 }
                 await this.cache.setItem('base', base);
-                this.status(conflicts ? 'NAS: Konflikt erkannt; beide Fassungen wurden erhalten.' : 'NAS: synchronisiert · ' + new Date().toLocaleTimeString());
+                var conflictCount = remote.records.filter(function(record) { return record.collection === 'notes' && Number(record.data.trash) === 0 && record.data.conflictOf; }).length;
+                this.status(conflictCount ? 'NAS: ' + conflictCount + ' offene Konflikte · In der Notizansicht vergleichen.' : conflicts ? 'NAS: Konflikt erkannt; beide Fassungen wurden erhalten.' : 'NAS: synchronisiert · ' + new Date().toLocaleTimeString(),false,conflictCount || conflicts ? 'conflict' : 'synced');
             } catch (error) {
-                this.status((error.status === 401 ? 'NAS: Anmeldung abgelaufen. Öffne NAS-Konto zur Anmeldung.' : error.message || 'NAS offline – Änderungen bleiben auf diesem Gerät.'), true);
+                this.status((error.status === 401 ? 'NAS: Anmeldung abgelaufen. Öffne NAS-Konto zur Anmeldung.' : navigator.onLine ? error.message : 'Lokal gespeichert · Offline; Übertragung folgt automatisch.'), navigator.onLine, navigator.onLine ? 'error' : 'offline');
                 Radio.trigger('sync', 'error', {cloud:'nas',error:error});
             } finally {
                 this.running = false; Radio.trigger('sync', 'stop', 'nas');

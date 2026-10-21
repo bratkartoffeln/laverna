@@ -136,6 +136,7 @@ define([
             })
             .fail(function(e) {
                 console.error('Error', e);
+                self.view.trigger('save:error',e);
             });
         },
 

@@ -97,6 +97,29 @@ async function build() {
         fs.readFile(path.join(vendor, 'prism', 'components', 'prism-' + name + '.js'), 'utf8')
     ));
     await fs.writeFile(path.join(vendor, 'prism', 'bundle.js'), prism.join('\n;\n'));
+    const offlineAssets = new Set(['/manifest.webmanifest']);
+    async function offlineTree(relative) {
+        for (const entry of await fs.readdir(path.join(web,relative), {withFileTypes:true})) {
+            if (entry.name.startsWith('.') || ['test','tests','demo','demos','doc','docs','node_modules'].includes(entry.name)) continue;
+            const filename = relative + '/' + entry.name;
+            if (entry.isDirectory()) await offlineTree(filename);
+            else if (/\.(?:js|json|html|css|woff2?|ttf|svg|png|gif|ico)$/.test(filename)) offlineAssets.add('/' + filename);
+        }
+    }
+    for (const directory of ['scripts','styles','locales','images/icon','bower_components/codemirror']) await offlineTree(directory);
+    const requireConfig = await fs.readFile(path.join(web,'scripts','main.js'),'utf8');
+    const vendorPaths = [...requireConfig.matchAll(/['"]\.\.\/(bower_components\/[^'"?]+)(\?[^'"]*)?['"]/g)].map(match => match[1]);
+    vendorPaths.push('bower_components/requirejs/require.js','bower_components/modernizr/modernizr.js','bower_components/prism/bundle.js');
+    for (let filename of vendorPaths) {
+        if (!filename.endsWith('.js')) filename += '.js';
+        if (await fs.stat(path.join(web,filename)).then(info => info.isFile()).catch(() => false)) offlineAssets.add('/' + filename);
+    }
+    const assets = [...offlineAssets].sort(), offlineHash = createHash('sha256');
+    for (const filename of assets) offlineHash.update(await fs.readFile(path.join(web,filename.slice(1))));
+    const worker = await fs.readFile(path.join(web,'sw.js'),'utf8');
+    offlineHash.update(worker);
+    await fs.writeFile(path.join(web,'sw.js'),worker.replace('__OFFLINE_VERSION__',offlineHash.digest('hex').slice(0,20)));
+    await fs.writeFile(path.join(web,'offline-assets.json'),JSON.stringify(assets));
     await fs.copyFile(path.join(root, 'LICENSE'), path.join(web, 'LICENSE'));
     for (const filename of ['compose.yaml', 'compose.dns.yaml', 'Caddyfile.dns', 'nginx.conf', 'README.md', 'QNAP-START.md', 'DEPLOYMENT.md', '.env.example']) {
         await fs.copyFile(path.join(__dirname, filename), path.join(output, filename));

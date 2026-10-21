@@ -157,9 +157,26 @@ define([
 
             this.Collection.prototype.sortField = sortField;
 
+            var pageSize = options.pageSize;
+            if (options.filter === 'search') options.pageSize = 0;
+
             return getAll(options)
-            .then(function(collection) {
+            .then(async function(collection) {
+                if (options.filter === 'search') {
+                    var context = {notebooks:{},tags:{}};
+                    for (var type of ['notebooks','tags']) {
+                        var values = await Radio.request(type,'fetch',{profile:options.profile});
+                        (values.fullCollection || values).each(function(model) { context[type][model.id] = model.get('name'); });
+                    }
+                    collection.searchContext = context;
+                }
                 self._filterOnFetch(collection, options);
+                if (options.filter === 'search' && Number(pageSize) > 0) {
+                    collection.state.pageSize = Number(pageSize);
+                    collection.fullCollection = collection.clone();
+                    collection._updateTotalPages();
+                    collection.getPage(options.page || collection.state.firstPage);
+                }
                 return collection;
             });
         },

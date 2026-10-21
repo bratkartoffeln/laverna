@@ -7,6 +7,10 @@
     </div>
 
     <div class="navbar-right header--right navbar-btn dropdown">
+        <% if (window.LAVERNA_NAS) { %>
+        <button type="button" class="btn -note btn-default note--history" title="Notizverlauf"><i class="icon-eye"></i><span class="hidden-xs"> Verlauf</span></button>
+        <button type="button" class="btn -note btn-default note--conflicts" title="Konflikte vergleichen"><i class="icon-arrows"></i><span class="hidden-xs"> Konflikte</span></button>
+        <% } %>
         <a href="#{{uri}}notes/edit/{{id}}" class="btn -note btn-default note--edit">
             <span class="icon-pencil"></span>
             <span class="hidden-xs">{{i18n('Edit')}}</span>

@@ -187,6 +187,7 @@ define([
          * Text in the editor changed.
          */
         onChange: function() {
+            Radio.trigger('notesForm','dirty');
 
             // Update the preview
             this.updatePreview();

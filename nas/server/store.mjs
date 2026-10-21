@@ -150,6 +150,7 @@ export class Store {
           if (Number(c.data.trash) !== 2) {
             conflictId = randomUUID();
             const copy = { ...c.data, id: conflictId };
+            if (c.collection === 'notes') copy.conflictOf = c.id;
             if (c.collection === 'notes' && !copy.encryptedData) copy.title += ' (Konfliktkopie)';
             this.write(user, profile, c.collection, conflictId, canonical(copy));
           } else this.db.prepare('INSERT INTO revisions(user_id,profile,collection,id,data,created) VALUES(?,?,?,?,?,?)').run(user, profile, c.collection, c.id, c.encoded, Date.now());

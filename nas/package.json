@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node build.js",
     "test": "node --test server/test/*.test.mjs updater/*.test.mjs",
-    "test:browser": "node tests/browser.mjs && node tests/account.mjs && node tests/upstream.mjs"
+    "test:browser": "node tests/browser.mjs && node tests/account.mjs && node tests/upstream.mjs && node tests/features.mjs"
   },
   "engines": {
     "node": ">=24.14.0 <25"

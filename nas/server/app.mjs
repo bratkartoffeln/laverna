@@ -3,11 +3,14 @@ import { readFile, stat, writeFile, unlink } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { resolve, extname, sep } from 'node:path';
 import { Store, fail, checkPassword } from './store.mjs';
+import { Backups } from './backups.mjs';
 
 const mime = { '.html':'text/html; charset=utf-8', '.js':'application/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.json':'application/json; charset=utf-8', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.gif':'image/gif', '.ico':'image/x-icon', '.woff':'font/woff', '.woff2':'font/woff2', '.ttf':'font/ttf', '.eot':'application/vnd.ms-fontobject', '.map':'application/json', '.md':'text/plain; charset=utf-8', '.less':'text/plain; charset=utf-8' };
 export async function application({ dataDirectory, webDirectory, accountDirectory = new URL('./public/', import.meta.url), secureCookies = true, publicUrl, revision = 'development' }) {
   const store = await Store.open(dataDirectory);
+  const backups = await Backups.open(store);
   const web = resolve(webDirectory);
+  mime['.webmanifest'] = 'application/manifest+json';
   const rate = new Map();
   let hashing = 0;
   let mutations = 0;
@@ -110,6 +113,28 @@ export async function application({ dataDirectory, webDirectory, accountDirector
         if (path === '/api/sync' && req.method === 'POST') return send(res, 200, store.save(user.id, body.profile, body));
         if (path === '/api/profiles' && req.method === 'GET') return send(res, 200, { profiles: store.db.prepare('SELECT name,crypto FROM profiles WHERE user_id=?').all(user.id).map(p => ({name:p.name, crypto:JSON.parse(p.crypto)})) });
         if (path === '/api/history' && req.method === 'GET') return send(res, 200, { revisions: store.history(user.id, url.searchParams.get('profile') || 'notes-db', url.searchParams.get('collection'), url.searchParams.get('id')) });
+        if (path === '/api/backups' && user.admin) {
+          if (req.method === 'GET') return send(res, 200, await backups.list());
+          if (body.action === 'create') return send(res, 201, await backups.create());
+          if (body.action === 'schedule') { await backups.configure(body.intervalHours); return send(res, 200, await backups.list()); }
+          if (body.action === 'restore') {
+            if (body.confirmation !== 'WIEDERHERSTELLEN') fail(400, 'Bestätigung zur Wiederherstellung fehlt.');
+            if (!await limitedHash(() => checkPassword(body.password, user.password))) fail(403, 'Administratorkennwort falsch.');
+            maintenanceRequested = true;
+            try {
+              const until = Date.now() + 10000;
+              while (mutations > 1 && Date.now() < until) await new Promise(resolve => setTimeout(resolve, 25));
+              if (mutations > 1) fail(503, 'Schreibvorgänge noch aktiv.');
+              return send(res, 200, await backups.restore(body.id));
+            } finally { maintenanceRequested = false; }
+          }
+        }
+        if (path === '/api/backups/download' && req.method === 'GET' && user.admin) {
+          const id = url.searchParams.get('id'), filename = await backups.filename(id);
+          res.setHeader('Content-Type', 'application/vnd.sqlite3');
+          res.setHeader('Content-Disposition', 'attachment; filename="' + id + '"');
+          createReadStream(filename).on('error', () => res.destroy()).pipe(res); return;
+        }
         if (path === '/api/users' && user.admin) {
           if (req.method === 'GET') return send(res, 200, { users: store.users() });
           if (req.method === 'POST') {
@@ -164,5 +189,5 @@ export async function application({ dataDirectory, webDirectory, accountDirector
   });
   server.requestTimeout = 30000;
   server.headersTimeout = 15000;
-  return { server, store, close: async () => { await new Promise(resolve => server.close(resolve)); store.close(); } };
+  return { server, store, backups, close: async () => { await backups.close(); await new Promise(resolve => server.close(resolve)); store.close(); } };
 }

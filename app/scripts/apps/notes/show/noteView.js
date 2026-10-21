@@ -13,8 +13,8 @@ define([
     'backbone.radio',
     'behaviors/content',
     'text!apps/notes/show/templates/item.html',
-    'mousetrap'
-], function(_, $, Marionette, Radio, Behavior, Tmpl, Mousetrap) {
+    'mousetrap', 'helpers/note-search', 'modules/nas/tools'
+], function(_, $, Marionette, Radio, Behavior, Tmpl, Mousetrap, Search, Tools) {
     'use strict';
 
     /**
@@ -55,6 +55,8 @@ define([
         },
 
         events: {
+            'click .note--history': 'showHistory',
+            'click .note--conflicts': 'showConflicts',
             'click .btn--favourite' : 'favorite',
             'click @ui.tasks'       : 'onClickTask',
             'click @ui.rmBtn'       : 'rmNote'
@@ -85,7 +87,10 @@ define([
 
         onRender: function() {
             Radio.trigger('noteView', 'view:render', this);
+            Search.highlight(this.el,this.options.args && this.options.args.filter === 'search' ? this.options.args.query : '');
         },
+        showHistory: function() { Tools.history(this.model,this); },
+        showConflicts: function() { Tools.conflicts(this.model); },
 
         onBeforeDestroy: function() {
             Mousetrap.unbind(['up', 'down', this.configs.actionsEdit, this.configs.actionsRemove, this.configs.actionsRotateStar]);

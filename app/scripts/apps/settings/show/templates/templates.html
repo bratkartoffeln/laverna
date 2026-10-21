@@ -1,0 +1,10 @@
+<h2 class="h3">Notizvorlagen</h2>
+<p>Vorlagen werden in diesem Browser und Profil gespeichert. <code>&#123;&#123;date&#125;&#125;</code> wird beim Einfügen durch das aktuelle Datum ersetzt. Im Editor wird der Inhalt an der Cursorposition eingefügt.</p>
+<div id="template-message" class="alert" role="status" hidden></div>
+<div id="template-list" class="list-group"></div>
+<form id="template-form">
+    <div class="form-group"><label for="template-name" class="col-sm-3 control-label">Name</label><div class="col-sm-9"><input id="template-name" name="name" class="form-control" maxlength="120" required></div></div>
+    <div class="form-group"><label for="template-title" class="col-sm-3 control-label">Notiztitel</label><div class="col-sm-9"><input id="template-title" name="title" class="form-control" maxlength="500"></div></div>
+    <div class="form-group"><label for="template-content" class="col-sm-3 control-label">Markdown-Inhalt</label><div class="col-sm-9"><textarea id="template-content" name="content" class="form-control" rows="10" maxlength="100000" required></textarea></div></div>
+    <div class="form-group"><div class="col-sm-offset-3 col-sm-9"><button class="btn btn-success" type="submit">Vorlage speichern</button> <button class="btn btn-default" type="reset" id="template-new">Neue Vorlage</button></div></div>
+</form>

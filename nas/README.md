@@ -36,13 +36,54 @@ Der Schalter **Dark-Modus einschalten/ausschalten** im Seitenmenü unter
 bleibt beim Neuladen und Abmelden erhalten und wird auch für die Anmeldung verwendet.
 Notizliste, Editor, Markdown-Vorschau, Dialoge und Kontoverwaltung passen ihre Farben an.
 
+## Verlauf, Suche und Vorlagen
+
+In einer geöffneten Notiz zeigt **Verlauf** die letzten bis zu 100 auf dem NAS
+gespeicherten Fassungen neben dem aktuellen Text. **Als neue Fassung
+wiederherstellen** übernimmt den ausgewählten Stand, ohne den bisherigen Verlauf
+zu löschen. Verschlüsselte Fassungen werden erst im angemeldeten Browser entschlüsselt.
+Der Verlauf ist bei fehlender NAS-Verbindung nicht verfügbar.
+
+Die Suche kombiniert Text und Filter, zum Beispiel
+`"genaue Wortfolge" tag:arbeit notebook:"Projekt Alpha" updated:2026-01-01 -entwurf`.
+`updated:` und `after:` suchen ab dem angegebenen lokalen Kalendertag,
+`before:` vor diesem Tag. Ein Minus schließt einen Begriff oder Filter aus.
+Die Suche berücksichtigt alle aktiven Notizen des Profils, auch außerhalb der
+aktuellen Listenseite, und hebt Texttreffer hervor.
+
+Unter **Einstellungen → Notizvorlagen** stehen Besprechung, Aufgaben und Tagesjournal
+bereit. Eigene Vorlagen lassen sich dort speichern, bearbeiten und löschen.
+Die eigenen Vorlagen gelten für diesen Browser und dieses Profil und sind im
+Einstellungsexport enthalten. Im Editor fügt **Vorlage einfügen** Text an der
+Cursorposition ein; vorhandener Text wird nicht überschrieben.
+Der Platzhalter `{{date}}` wird durch das aktuelle Datum ersetzt.
+
+## Offline und Synchronisierungsstatus
+
+Unter **Einstellungen → Ansicht** steht, ob die Offline-Vorbereitung abgeschlossen
+ist. Danach lässt sich Laverna auch ohne Verbindung erneut öffnen und bearbeiten.
+Die Funktion benötigt HTTPS oder localhost. Die Installation als App ist über den
+Browser und, soweit unterstützt, über **Laverna installieren** möglich.
+Nach einer Aktualisierung und dem Schließen der alten App-Fenster wird der neue
+Offline-Stand vorbereitet. Erst nach der Bereitschaftsanzeige ist er vollständig verfügbar.
+
+Offline wird das zuletzt angemeldete Konto verwendet. Notizdaten bleiben pro Konto
+getrennt; Abmelden hebt den Offline-Zugang auf. Die Offline-Identität enthält weder
+Sitzungscookies noch CSRF-Token. Für optional verschlüsselte Notizen ist weiterhin
+das Verschlüsselungspasswort erforderlich. Anhänge und mathematische Darstellung
+können zusätzliche, zuvor online geladene Dateien benötigen.
+
+Im Editor zeigt der Status lokale Speicherung, ausstehenden Abgleich, laufende
+Übertragung, erfolgreiche Synchronisierung oder einen Fehler an. Nach dem
+Wiederverbinden werden lokale Änderungen automatisch übertragen.
+
 ## Abgleich und bestehende Daten
 
 Nach dem Speichern und spätestens alle 15 Sekunden wird das aktive Profil
 abgeglichen. Ohne Netzwerk bleiben Bearbeitungen lokal und werden nach
 Wiederherstellung der Verbindung erneut übertragen. Bereits geladene Notizen
-lassen sich in der geöffneten Anwendung ohne Verbindung bearbeiten; ein neuer
-Seitenaufruf benötigt den NAS-Server. Der Status steht im Seitenmenü, der
+lassen sich nach der Offline-Vorbereitung auch ohne Verbindung erneut öffnen.
+Der Status steht im Editor und im Seitenmenü, der
 Synchronisierungsknopf startet einen sofortigen Abgleich.
 
 Gleichzeitige Bearbeitungen erzeugen Konfliktkopien. Eine veraltete Löschung
@@ -58,6 +99,13 @@ Kontozuordnung werden nicht automatisch einem Benutzer zugeschlagen. Unter
 erhalten. Daten von einer anderen Adresse zuerst dort exportieren und anschließend
 in das angemeldete NAS-Konto importieren. Für weitere Profile zuerst das entsprechende
 Profil anlegen/auswählen; auf dem Server bekannte Profile werden in der Profilliste ergänzt.
+
+**Konflikte** in der Notizansicht zeigt zusammengehörige Fassungen nebeneinander.
+Du kannst die aktuelle oder die Konfliktfassung behalten oder Titel und Inhalt
+manuell zusammenführen. Die übernommene Fassung wird als neue Änderung gespeichert;
+die erledigte Konfliktkopie wandert anschließend in den Papierkorb.
+Ältere Konfliktkopien ohne Zuordnung können über **Andere Notiz vergleichen**
+manuell einer aktiven Notiz gegenübergestellt werden.
 
 ## Optionale Laverna-Verschlüsselung
 
@@ -86,6 +134,22 @@ Konsistente Datenbanksicherung: sh scripts/qnap.sh backup.
 Auch bei laufendem Server ausschließlich die SQLite-Backup-Funktion verwenden;
 eine alleinige Kopie der geöffneten Datenbankdatei kann WAL-Daten auslassen.
 Den gesamten Datenordner regelmäßig mit der NAS-Sicherung sichern.
+
+Administratoren können unter **Einstellungen → NAS-Sicherungen** konsistente
+SQLite-Sicherungen erstellen und herunterladen sowie tägliche oder wöchentliche
+Sicherungen aktivieren. Automatische Sicherungen sind zunächst ausgeschaltet;
+nach dem Aktivieren erfolgt die erste Sicherung spätestens bei der nächsten
+minütlichen Prüfung. Dateien werden nicht automatisch gelöscht.
+
+Eine Wiederherstellung benötigt das Administratorkennwort und die Eingabe
+`WIEDERHERSTELLEN`. Die Datei wird auf SQLite-Integrität, Format und passende
+Verschlüsselungseinstellungen geprüft. Vorher wird der aktuelle Stand gesichert.
+Notizen, Notizbücher, Tags und Anhänge der enthaltenen Profile werden mit neuen
+Revisionsnummern übernommen; spätere Datensätze dieser Profile werden als gelöscht
+markiert. Konten, Sitzungen und der bisherige Verlauf bleiben erhalten.
+Zusätzliche Profile, die nicht in der Sicherung stehen, bleiben erhalten.
+Der normale Abgleich überträgt den wiederhergestellten Stand an andere Geräte;
+zwischenzeitliche Bearbeitungen werden weiterhin als Konfliktkopien erhalten.
 
 Der eigene Updater prüft alle fünf Minuten bratkartoffeln/laverna, Branch master.
 Nur der neueste erfolgreiche **push**-Lauf von verify.yml für exakt denselben

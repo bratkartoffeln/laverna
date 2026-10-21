@@ -1,6 +1,6 @@
 services:
   laverna:
-    image: laverna-app:2.0.2
+    image: laverna-app:2.0.3
     build:
       context: .
       dockerfile: deploy/Dockerfile.app

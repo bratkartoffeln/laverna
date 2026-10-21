@@ -1,6 +1,6 @@
 {
   "name": "laverna",
-  "version": "0.7.4-RC1",
+  "version": "0.7.51",
   "license": "MPL-2.0",
   "dependencies": {
     "backbone": "~1.3.3",
@@ -11,8 +11,7 @@
     "bluebird": "~3.4.0",
     "blueimp-canvas-to-blob": "git://github.com/blueimp/JavaScript-Canvas-to-Blob#~2.1.1",
     "bootstrap": "~3.3.6",
-    "device.js": "git://github.com/matthewhudson/device.js",
-    "dropbox": "dropbox-build#*",
+    "device.js": "git://github.com/matthewhudson/device.js#0.2.7",
     "dropzone": "~4.3.0",
     "enquire": "~2.1.2",
     "FileSaver": "*",
@@ -21,7 +20,6 @@
     "i18next": "~3.4.1",
     "jquery": "~3.1.0",
     "localforage": "~1.4.2",
-    "marionette": "~2.4.7",
     "MathJax": "components/MathJax#~2.6.0",
     "modernizr": "~2.8.3",
     "mousetrap": "~1.6.0",

@@ -9,6 +9,9 @@ Laverna is a JavaScript note-taking web application with a Markdown editor and e
 This fork adds **NAS synchronization with separate user accounts**, persistent SQLite storage,
 and verified automatic QNAP container updates. See [the NAS guide](nas/README.md).
 
+The fork includes the stable upstream `master` through `9e2caf95` (Laverna `0.7.51`).
+The separate upstream `dev` rewrite is not part of this NAS edition.
+
 The application stores all your notes in your browser databases such as indexedDB or localStorage, which is good for security reasons, because only you have access to them.
 
 **Demo**: https://laverna.cc/ OR http://laverna.github.io/static-laverna
@@ -56,7 +59,7 @@ The package can be found [here](https://aur.archlinux.org/packages/laverna/).
 For installation please use :
 
 ```bash
-$ yaourt -S laverna
+$ pacaur -S laverna
 ```
 
 For issue about installation please report [here](https://github.com/funilrys/PKGBUILD/issues/new) or contact [@funilrys](https://github.com/funilrys) on gitter [here](https://gitter.im/funilrys_/PKGBUILD)
@@ -136,6 +139,20 @@ $ gulp build
 $ gulp
 ```
 
+## MacOS notes on accepting incoming connections
+Because currently Laverna does not sign it's Mac packages, if you want to avoid the "Accept incoming connections" warning message everytime the application is launched, you can run the following commands. Assuming your current direction contains the laverna application:
+
+```bash
+codesign -s - -f ./laverna.app/Contents/Frameworks/Electron\ Framework.framework
+codesign -s - -f ./laverna.app/Contents/Frameworks/Electron\ Helper\ EH.app
+codesign -s - -f ./laverna.app/Contents/Frameworks/Electron\ Helper\ NP.app
+codesign -s - -f ./laverna.app/Contents/Frameworks/Electron\ Helper.app
+codesign -s - -f ./laverna.app/Contents/Frameworks/Mantle.framework
+codesign -s - -f ./laverna.app/Contents/Frameworks/ReactiveCocoa.framework
+codesign -s - -f ./laverna.app/Contents/Frameworks/Squirrel.framework
+codesign --verify -vv ./laverna.app
+```
+
 ## Do you have questions?
 ---------------
 Please have a look in our [wiki][15].
@@ -147,7 +164,7 @@ Please have a look in our [wiki][15].
 * Like us on [alternativeto.net][5]
 * [Contribute][7]
 
-###Coding Style Guidelines
+### Coding Style Guidelines
 
 For those wanting to contribute code, we ask that you use either plain JavaScript or the Marionette.js framework. (For more details on the preferred coding style see [.editorconfig](https://github.com/Laverna/laverna/blob/master/.editorconfig)). Also, all experimental changes are being pushed on the **dev** branch, so any feature changes are preferred to be done on either this branch or a branch that uses the dev branch as its parent.  
 

@@ -35,7 +35,10 @@ html[data-theme="dark"] {
         box-shadow: 0 1px 4px #0006;
     }
     .header {
-        .navbar-nav > li > a, .navbar-btn, .navbar-link, .navbar-text, .btn-link { color: @text; }
+        .navbar-nav > li > a, .navbar-btn, .navbar-link, .navbar-text, .btn-link {
+            color: @text;
+            &:hover, &:focus { color: @text; }
+        }
         .header--title:hover, .header--title:focus { background: @raised; }
     }
     .sidemenu, .list-group-item, .sidemenu--item.list-group-item, .list--settings.list-group-item {

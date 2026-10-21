@@ -64,14 +64,6 @@
     "target": "v0.2.7",
     "commit": "02233eaaf51f993c762f770e42fbe537872dd3fe"
   },
-  "dropbox": {
-    "source": "https://registry.npmjs.org/dropbox/-/dropbox-0.10.3.tgz",
-    "target": "*",
-    "commit": null,
-    "sha256": {
-      "lib/dropbox.js": "9045094f88a4a0f76a58faa9f5e2d2159a17077d058cfe6292a459f850699d38"
-    }
-  },
   "dropzone": {
     "source": "https://github.com/enyo/dropzone.git",
     "target": "v4.3.0",

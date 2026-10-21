@@ -78,7 +78,6 @@ async function build() {
     });
     const vendor = path.join(web, 'bower_components');
     await fs.cp(path.join(staging, 'bower_components'), vendor, { recursive: true });
-    await fs.copyFile(path.join(vendor, 'dropbox', 'lib', 'dropbox.js'), path.join(vendor, 'dropbox', 'dropbox.js'));
 
     const styles = path.join(root, 'app', 'styles');
     for (const entry of await fs.readdir(styles, { withFileTypes: true })) {

@@ -15,8 +15,8 @@ Auf der Browseradresse anmelden. Auf einem neuen Gerät ist die
 NAS-Synchronisierung automatisch aktiviert. Unter **Einstellungen → NAS-Konto** können Benutzer
 ihr Passwort ändern oder sich abmelden. Der Administrator kann dort Konten
 anlegen, sperren und Passwörter zurücksetzen. Es gibt keine öffentliche Registrierung.
-Die Kontoverwaltung ist Teil des gewohnten Laverna-Layouts. Auch der Eintrag
-**NAS-Konto** im Seitenmenü und die Adresse `/account` führen zu diesem Reiter.
+Die Kontoverwaltung ist Teil des gewohnten Laverna-Layouts. Die Adresse `/account`
+führt ebenfalls zum Reiter **NAS-Konto** unter **Einstellungen**.
 Am Verschlüsselungsbildschirm ermöglicht **NAS-Anmeldung wechseln** den Kontowechsel,
 ohne zuvor die Notizen entsperren zu müssen.
 Passwörter benötigen mindestens zwölf Zeichen und werden mit scrypt gespeichert.
